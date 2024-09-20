@@ -332,4 +332,92 @@ void function KidGloves() {
     });
   }
 
+
+  if (globalThis.DocumentFragment?.prototype?.querySelector && !globalThis.DocumentFragment?.prototype?.['&querySelector']) {
+    objDefProp(DocumentFragment.prototype, '&querySelector', DocumentFragment.prototype.querySelector);
+    objDefProp(DocumentFragment.prototype, 'querySelector', function querySelector() {
+      try {
+        return this['&querySelector'](...arguments);
+      } catch (e) {
+        console.warn(e);
+        return null;
+      }
+    });
+  }
+
+  if (globalThis.DocumentFragment?.prototype?.querySelectorAll && !globalThis.DocumentFragment?.prototype?.['&querySelectorAll']) {
+    objDefProp(DocumentFragment.prototype, '&querySelectorAll', DocumentFragment.prototype.querySelectorAll);
+    objDefProp(DocumentFragment.prototype, 'querySelectorAll', function querySelectorAll() {
+      try {
+        return this['&querySelectorAll'](...arguments);
+      } catch (e) {
+        console.warn(e);
+        return emptyNodeList();
+      }
+    });
+  }
+
+  if (globalThis.DocumentFragment?.prototype?.getElementById && !globalThis.DocumentFragment?.prototype?.['&getElementById']) {
+    objDefProp(DocumentFragment.prototype, '&getElementById', DocumentFragment.prototype.getElementById);
+    objDefProp(DocumentFragment.prototype, 'getElementById', function getElementById() {
+      try {
+        return this['&getElementById'](...arguments);
+      } catch (e) {
+        console.warn(e);
+        return null;
+      }
+    });
+  }
+
+
+  if (globalThis.DocumentFragment?.prototype?.getElementsByTagName && !globalThis.DocumentFragment?.prototype?.['&getElementsByTagName']) {
+    objDefProp(DocumentFragment.prototype, '&getElementsByTagName', DocumentFragment.prototype.getElementsByTagName);
+    objDefProp(DocumentFragment.prototype, 'getElementsByTagName', function getElementsByTagName() {
+      try {
+        return this['&getElementsByTagName'](...arguments);
+      } catch (e) {
+        console.warn(e);
+        return this['&getElementsByTagName']('<>');
+      }
+    });
+  }
+
+
+  if (globalThis.DocumentFragment?.prototype?.getElementsByClassName && !globalThis.DocumentFragment?.prototype?.['&getElementsByClassName']) {
+    objDefProp(DocumentFragment.prototype, '&getElementsByClassName', DocumentFragment.prototype.getElementsByClassName);
+    objDefProp(DocumentFragment.prototype, 'getElementsByClassName', function getElementsByClassName() {
+      try {
+        return this['&getElementsByClassName'](...arguments);
+      } catch (e) {
+        console.warn(e);
+        return this['&getElementsByTagName']('<>');
+      }
+    });
+  }
+
+  if (globalThis.DocumentFragment?.prototype?.getElementsByTagNameNS && !globalThis.DocumentFragment?.prototype?.['&getElementsByTagNameNS']) {
+    objDefProp(DocumentFragment.prototype, '&getElementsByTagNameNS', DocumentFragment.prototype.getElementsByTagNameNS);
+    objDefProp(DocumentFragment.prototype, 'getElementsByTagNameNS', function getElementsByTagNameNS() {
+      try {
+        return this['&getElementsByTagNameNS'](...arguments);
+      } catch (e) {
+        console.warn(e);
+        return this['&getElementsByTagNameNS']('<>');
+      }
+    });
+  }
+
+  if (globalThis.DocumentFragment?.prototype?.getElementsByName && !globalThis.DocumentFragment?.prototype?.['&getElementsByName']) {
+    objDefProp(DocumentFragment.prototype, '&getElementsByName', DocumentFragment.prototype.getElementsByName);
+    objDefProp(DocumentFragment.prototype, 'getElementsByName', function getElementsByName() {
+      try {
+        return this['&getElementsByName'](...arguments);
+      } catch (e) {
+        console.warn(e);
+        return this['&getElementsByTagName']('<>');
+      }
+    });
+  }
+
+  
 }();
