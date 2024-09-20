@@ -158,5 +158,178 @@ void function KidGloves() {
     Object.setPrototypeOf(Set, globalThis['&Set']);
   }
 
+  function emptyNodeList() {
+    let sel = 'querySelectorAll';
+    if (document['&querySelectorAll']) {
+      sel = '&querySelectorAll';
+    }
+    let x = document[sel](btoa(new Date().getTime()).replace(/[^a-zA-Z]/g, ''));
+    for (let i = 0; i < 100; i++) {
+      if (!x.length) { break; }
+      x = document[sel](btoa(new Date().getTime()).replace(/[^a-zA-Z]/g, ''));
+    }
+    return x ?? [];
+  }
+
+
+  if (globalThis.Document?.prototype?.querySelector && !globalThis.Document?.prototype?.['&querySelector']) {
+    objDefProp(Document.prototype, '&querySelector', Document.prototype.querySelector);
+    objDefProp(Document.prototype, 'querySelector', function querySelector() {
+      try {
+        return this['&querySelector'](...arguments);
+      } catch (e) {
+        console.warn(e);
+        return null;
+      }
+    });
+  }
+
+  if (globalThis.Document?.prototype?.querySelectorAll && !globalThis.Document?.prototype?.['&querySelectorAll']) {
+    objDefProp(Document.prototype, '&querySelectorAll', Document.prototype.querySelectorAll);
+    objDefProp(Document.prototype, 'querySelectorAll', function querySelectorAll() {
+      try {
+        return this['&querySelectorAll'](...arguments);
+      } catch (e) {
+        console.warn(e);
+        return emptyNodeList();
+      }
+    });
+  }
+
+  if (globalThis.Document?.prototype?.getElementById && !globalThis.Document?.prototype?.['&getElementById']) {
+    objDefProp(Document.prototype, '&getElementById', Document.prototype.getElementById);
+    objDefProp(Document.prototype, 'getElementById', function getElementById() {
+      try {
+        return this['&getElementById'](...arguments);
+      } catch (e) {
+        console.warn(e);
+        return null;
+      }
+    });
+  }
+
+
+  if (globalThis.Document?.prototype?.getElementsByTagName && !globalThis.Document?.prototype?.['&getElementsByTagName']) {
+    objDefProp(Document.prototype, '&getElementsByTagName', Document.prototype.getElementsByTagName);
+    objDefProp(Document.prototype, 'getElementsByTagName', function getElementsByTagName() {
+      try {
+        return this['&getElementsByTagName'](...arguments);
+      } catch (e) {
+        console.warn(e);
+        return this['&getElementsByTagName']('<>');
+      }
+    });
+  }
+
+
+  if (globalThis.Document?.prototype?.getElementsByClassName && !globalThis.Document?.prototype?.['&getElementsByClassName']) {
+    objDefProp(Document.prototype, '&getElementsByClassName', Document.prototype.getElementsByClassName);
+    objDefProp(Document.prototype, 'getElementsByClassName', function getElementsByClassName() {
+      try {
+        return this['&getElementsByClassName'](...arguments);
+      } catch (e) {
+        console.warn(e);
+        return this['&getElementsByTagName']('<>');
+      }
+    });
+  }
+
+  if (globalThis.Document?.prototype?.getElementsByTagNameNS && !globalThis.Document?.prototype?.['&getElementsByTagNameNS']) {
+    objDefProp(Document.prototype, '&getElementsByTagNameNS', Document.prototype.getElementsByTagNameNS);
+    objDefProp(Document.prototype, 'getElementsByTagNameNS', function getElementsByTagNameNS() {
+      try {
+        return this['&getElementsByTagNameNS'](...arguments);
+      } catch (e) {
+        console.warn(e);
+        return this['&getElementsByTagNameNS']('<>');
+      }
+    });
+  }
+
+  if (globalThis.Document?.prototype?.getElementsByName && !globalThis.Document?.prototype?.['&getElementsByName']) {
+    objDefProp(Document.prototype, '&getElementsByName', Document.prototype.getElementsByName);
+    objDefProp(Document.prototype, 'getElementsByName', function getElementsByName() {
+      try {
+        return this['&getElementsByName'](...arguments);
+      } catch (e) {
+        console.warn(e);
+        return this['&getElementsByTagName']('<>');
+      }
+    });
+  }
+
+
+  if (globalThis.Element?.prototype?.querySelector && !globalThis.Element?.prototype?.['&querySelector']) {
+    objDefProp(Element.prototype, '&querySelector', Element.prototype.querySelector);
+    objDefProp(Element.prototype, 'querySelector', function querySelector() {
+      try {
+        return this['&querySelector'](...arguments);
+      } catch (e) {
+        console.warn(e);
+        return null;
+      }
+    });
+  }
+
+  if (globalThis.Element?.prototype?.querySelectorAll && !globalThis.Element?.prototype?.['&querySelectorAll']) {
+    objDefProp(Element.prototype, '&querySelectorAll', Element.prototype.querySelectorAll);
+    objDefProp(Element.prototype, 'querySelectorAll', function querySelectorAll() {
+      try {
+        return this['&querySelectorAll'](...arguments);
+      } catch (e) {
+        console.warn(e);
+        return emptyNodeList();
+      }
+    });
+  }
+
+
+  if (globalThis.Element?.prototype?.getElementsByTagName && !globalThis.Element?.prototype?.['&getElementsByTagName']) {
+    objDefProp(Element.prototype, '&getElementsByTagName', Element.prototype.getElementsByTagName);
+    objDefProp(Element.prototype, 'getElementsByTagName', function getElementsByTagName() {
+      try {
+        return this['&getElementsByTagName'](...arguments);
+      } catch (e) {
+        console.warn(e);
+        return this['&getElementsByTagName']('<>');
+      }
+    });
+  }
+
+  if (globalThis.Element?.prototype?.getElementsByClassName && !globalThis.Element?.prototype?.['&getElementsByClassName']) {
+    objDefProp(Element.prototype, '&getElementsByClassName', Element.prototype.getElementsByClassName);
+    objDefProp(Element.prototype, 'getElementsByClassName', function getElementsByClassName() {
+      try {
+        return this['&getElementsByClassName'](...arguments);
+      } catch (e) {
+        console.warn(e);
+        return this['&getElementsByTagName']('<>');
+      }
+    });
+  }
+
+  if (globalThis.Element?.prototype?.getElementsByTagNameNS && !globalThis.Element?.prototype?.['&getElementsByTagNameNS']) {
+    objDefProp(Element.prototype, '&getElementsByTagNameNS', Element.prototype.getElementsByTagNameNS);
+    objDefProp(Element.prototype, 'getElementsByTagNameNS', function getElementsByTagNameNS() {
+      try {
+        return this['&getElementsByTagNameNS'](...arguments);
+      } catch (e) {
+        console.warn(e);
+        return this['&getElementsByTagNameNS']('<>');
+      }
+    });
+  }
+
+  if (globalThis.Element?.prototype?.getElementsByName && !globalThis.Element?.prototype?.['&getElementsByName']) {
+    objDefProp(Element.prototype, '&getElementsByName', Element.prototype.getElementsByName);
+    objDefProp(Element.prototype, 'getElementsByName', function getElementsByName() {
+      try {
+        return this['&getElementsByName'](...arguments);
+      } catch (e) {
+        console.warn(e);
+        return this['&getElementsByTagName']('<>');
+      }
+    });
+  }
 
 }();

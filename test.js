@@ -9,7 +9,7 @@ void async function() {
   await sleep(1000);
 
   try {
-    let x = Set();
+    let x = new Set();
     x.add('a');
     document.querySelector('div').innerText = [...x];
   } catch (e) {
