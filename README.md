@@ -17,3 +17,10 @@ These objects can be called as a constructor without using the `new` keyword and
 
 # `document.querySelectorAll`
 `document.querySelectorAll` returns an empty `NodeList` even when given an invalid query and prints the typical error as a warning
+
+
+# `document.getElementById`
+`document.getElementById` returns `null` even when given an invalid query and prints the typical error as a warning
+
+# `document.getElementsByTagName`
+`document.getElementsBy(TagName|TagNameNS|ClassName|Name)` returns an empty `HTMLCollection` even when given an invalid query and prints the typical error as a warning
