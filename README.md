@@ -1,5 +1,7 @@
 # kid-gloves
-🌐 Kid Gloves turns many JS errors into warnings
+🌐 Kid Gloves
+
+Program with a gentler touch.
 
 
 Kid Gloves patches a bunch of JS quirks that potentially throw errors and turns those into warnings. This is intended to be used as a learning tool and for debugging purposes and not meant to monkey patch live production software.
