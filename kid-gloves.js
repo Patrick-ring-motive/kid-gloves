@@ -214,7 +214,7 @@ void function KidGloves() {
           return this['&getElementsByTagName'](...arguments);
         } catch (e) {
           console.warn(e);
-          return this['&getElementsByTagName']('<>');
+          return this['&getElementsByTagName']?.('<>')??[];
         }
       });
     }
@@ -227,7 +227,7 @@ void function KidGloves() {
           return this['&getElementsByClassName'](...arguments);
         } catch (e) {
           console.warn(e);
-          return this['&getElementsByTagName']('<>');
+          return this['&getElementsByTagName']?.('<>')??[];
         }
       });
     }
@@ -239,7 +239,7 @@ void function KidGloves() {
           return this['&getElementsByTagNameNS'](...arguments);
         } catch (e) {
           console.warn(e);
-          return this['&getElementsByTagNameNS']('<>');
+          return this['&getElementsByTagNameNS']?.('<>')[];
         }
       });
     }
@@ -251,7 +251,7 @@ void function KidGloves() {
           return this['&getElementsByName'](...arguments);
         } catch (e) {
           console.warn(e);
-          return this['&getElementsByTagName']('<>');
+          return this['&getElementsByTagName']?.('<>')??[];
         }
       });
     }
