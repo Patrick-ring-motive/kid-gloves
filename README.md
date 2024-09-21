@@ -6,21 +6,21 @@ Kid Gloves patches a bunch of JS quirks that potentially throw errors and turns 
 
 Fixes So far:
 
-# Use `new` with `BigInt` and `Symbol`
+### Use `new` with `BigInt` and `Symbol`
 Using the `new` keyword returns an Object wrapped version of `BigInt` and `Sybmol` while printing a warning to the console recommending to switch to not using it
 
-# Use `Promise`, `Set`, and `Map`
+### Use `Promise`, `Set`, and `Map`
 These objects can be called as a constructor without using the `new` keyword and prints a warning
 
-# `document.querySelector`
+### `document.querySelector`
 `document.querySelector` returns `null` even when given an invalid query and prints the typical error as a warning
 
-# `document.querySelectorAll`
+### `document.querySelectorAll`
 `document.querySelectorAll` returns an empty `NodeList` even when given an invalid query and prints the typical error as a warning
 
 
-# `document.getElementById`
+### `document.getElementById`
 `document.getElementById` returns `null` even when given an invalid query and prints the typical error as a warning
 
-# `document.getElementsByTagName`
+### `document.getElementsByTagName`
 `document.getElementsBy(TagName|TagNameNS|ClassName|Name)` returns an empty `HTMLCollection` even when given an invalid query and prints the typical error as a warning
