@@ -4,6 +4,8 @@
 
 Kid Gloves patches a bunch of JS quirks that potentially throw errors and turns those into warnings. This is intended to be used as a learning tool and for debugging purposes and not meant to monkey patch live production software.
 
+Note: This only aims to patch errors where the alternative outcome is obvious and doesn't change the existing behavior. So while functions like `JSON.parse` commonly error, there is no way to determine an appropriate return value without drastically changing behavior. `document.querySelector` on the other hand, already has a value for when the query fails to match an element and this makes a good alternative to throwing an error.
+
 Fixes So far:
 
 ### Use `new` with `BigInt` and `Symbol`
