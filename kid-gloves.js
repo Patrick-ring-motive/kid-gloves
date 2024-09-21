@@ -159,265 +159,107 @@ void function KidGloves() {
   }
 
   function emptyNodeList() {
-    let sel = 'querySelectorAll';
-    if (document['&querySelectorAll']) {
-      sel = '&querySelectorAll';
+    return document?.createDocumentFragment?.()?.querySelectorAll?.('*')??[]; 
+  }
+
+  function makeNodes(nodeType) {
+    if (globalThis[nodeType]?.prototype?.querySelector && !globalThis[nodeType]?.prototype?.['&querySelector']) {
+      objDefProp(globalThis[nodeType].prototype, '&querySelector', globalThis[nodeType].prototype.querySelector);
+      objDefProp(globalThis[nodeType].prototype, 'querySelector', function querySelector() {
+        try {
+          return this['&querySelector'](...arguments);
+        } catch (e) {
+          console.warn(e);
+          return null;
+        }
+      });
     }
-    let x = document[sel](btoa(new Date().getTime()).replace(/[^a-zA-Z]/g, ''));
-    for (let i = 0; i < 100; i++) {
-      if (!x.length) { break; }
-      x = document[sel](btoa(new Date().getTime()).replace(/[^a-zA-Z]/g, ''));
+
+    if (globalThis[nodeType]?.prototype?.querySelectorAll && !globalThis[nodeType]?.prototype?.['&querySelectorAll']) {
+      objDefProp(globalThis[nodeType].prototype, '&querySelectorAll', globalThis[nodeType].prototype.querySelectorAll);
+      objDefProp(globalThis[nodeType].prototype, 'querySelectorAll', function querySelectorAll() {
+        try {
+          return this['&querySelectorAll'](...arguments);
+        } catch (e) {
+          console.warn(e);
+          return emptyNodeList();
+        }
+      });
     }
-    return x ?? [];
+
+    if (globalThis[nodeType]?.prototype?.getElementById && !globalThis[nodeType]?.prototype?.['&getElementById']) {
+      objDefProp(globalThis[nodeType].prototype, '&getElementById', globalThis[nodeType].prototype.getElementById);
+      objDefProp(globalThis[nodeType].prototype, 'getElementById', function getElementById() {
+        try {
+          return this['&getElementById'](...arguments);
+        } catch (e) {
+          console.warn(e);
+          return null;
+        }
+      });
+    }
+
+    if (globalThis[nodeType]?.prototype?.getElementById && !globalThis[nodeType]?.prototype?.getElementsById){
+      objDefProp(globalThis[nodeType].prototype, 'getElementsById', function getElementById(query) {
+      console.warn('getElementsById is not supported. Did you mean getElementById?');
+        return this?.querySelectorAll?.(`[id="${String(query)}"]`);
+      });
+    }
+
+
+    if (globalThis[nodeType]?.prototype?.getElementsByTagName && !globalThis[nodeType]?.prototype?.['&getElementsByTagName']) {
+      objDefProp(globalThis[nodeType].prototype, '&getElementsByTagName', globalThis[nodeType].prototype.getElementsByTagName);
+      objDefProp(globalThis[nodeType].prototype, 'getElementsByTagName', function getElementsByTagName() {
+        try {
+          return this['&getElementsByTagName'](...arguments);
+        } catch (e) {
+          console.warn(e);
+          return this['&getElementsByTagName']('<>');
+        }
+      });
+    }
+
+
+    if (globalThis[nodeType]?.prototype?.getElementsByClassName && !globalThis[nodeType]?.prototype?.['&getElementsByClassName']) {
+      objDefProp(globalThis[nodeType].prototype, '&getElementsByClassName', globalThis[nodeType].prototype.getElementsByClassName);
+      objDefProp(globalThis[nodeType].prototype, 'getElementsByClassName', function getElementsByClassName() {
+        try {
+          return this['&getElementsByClassName'](...arguments);
+        } catch (e) {
+          console.warn(e);
+          return this['&getElementsByTagName']('<>');
+        }
+      });
+    }
+
+    if (globalThis[nodeType]?.prototype?.getElementsByTagNameNS && !globalThis[nodeType]?.prototype?.['&getElementsByTagNameNS']) {
+      objDefProp(globalThis[nodeType].prototype, '&getElementsByTagNameNS', globalThis[nodeType].prototype.getElementsByTagNameNS);
+      objDefProp(globalThis[nodeType].prototype, 'getElementsByTagNameNS', function getElementsByTagNameNS() {
+        try {
+          return this['&getElementsByTagNameNS'](...arguments);
+        } catch (e) {
+          console.warn(e);
+          return this['&getElementsByTagNameNS']('<>');
+        }
+      });
+    }
+
+    if (globalThis[nodeType]?.prototype?.getElementsByName && !globalThis[nodeType]?.prototype?.['&getElementsByName']) {
+      objDefProp(globalThis[nodeType].prototype, '&getElementsByName', globalThis[nodeType].prototype.getElementsByName);
+      objDefProp(globalThis[nodeType].prototype, 'getElementsByName', function getElementsByName() {
+        try {
+          return this['&getElementsByName'](...arguments);
+        } catch (e) {
+          console.warn(e);
+          return this['&getElementsByTagName']('<>');
+        }
+      });
+    }
   }
+  makeNodes('Document');
+  makeNodes('Element');
+  makeNodes('DocumentFragment');
 
 
-  if (globalThis.Document?.prototype?.querySelector && !globalThis.Document?.prototype?.['&querySelector']) {
-    objDefProp(Document.prototype, '&querySelector', Document.prototype.querySelector);
-    objDefProp(Document.prototype, 'querySelector', function querySelector() {
-      try {
-        return this['&querySelector'](...arguments);
-      } catch (e) {
-        console.warn(e);
-        return null;
-      }
-    });
-  }
 
-  if (globalThis.Document?.prototype?.querySelectorAll && !globalThis.Document?.prototype?.['&querySelectorAll']) {
-    objDefProp(Document.prototype, '&querySelectorAll', Document.prototype.querySelectorAll);
-    objDefProp(Document.prototype, 'querySelectorAll', function querySelectorAll() {
-      try {
-        return this['&querySelectorAll'](...arguments);
-      } catch (e) {
-        console.warn(e);
-        return emptyNodeList();
-      }
-    });
-  }
-
-  if (globalThis.Document?.prototype?.getElementById && !globalThis.Document?.prototype?.['&getElementById']) {
-    objDefProp(Document.prototype, '&getElementById', Document.prototype.getElementById);
-    objDefProp(Document.prototype, 'getElementById', function getElementById() {
-      try {
-        return this['&getElementById'](...arguments);
-      } catch (e) {
-        console.warn(e);
-        return null;
-      }
-    });
-  }
-
-
-  if (globalThis.Document?.prototype?.getElementsByTagName && !globalThis.Document?.prototype?.['&getElementsByTagName']) {
-    objDefProp(Document.prototype, '&getElementsByTagName', Document.prototype.getElementsByTagName);
-    objDefProp(Document.prototype, 'getElementsByTagName', function getElementsByTagName() {
-      try {
-        return this['&getElementsByTagName'](...arguments);
-      } catch (e) {
-        console.warn(e);
-        return this['&getElementsByTagName']('<>');
-      }
-    });
-  }
-
-
-  if (globalThis.Document?.prototype?.getElementsByClassName && !globalThis.Document?.prototype?.['&getElementsByClassName']) {
-    objDefProp(Document.prototype, '&getElementsByClassName', Document.prototype.getElementsByClassName);
-    objDefProp(Document.prototype, 'getElementsByClassName', function getElementsByClassName() {
-      try {
-        return this['&getElementsByClassName'](...arguments);
-      } catch (e) {
-        console.warn(e);
-        return this['&getElementsByTagName']('<>');
-      }
-    });
-  }
-
-  if (globalThis.Document?.prototype?.getElementsByTagNameNS && !globalThis.Document?.prototype?.['&getElementsByTagNameNS']) {
-    objDefProp(Document.prototype, '&getElementsByTagNameNS', Document.prototype.getElementsByTagNameNS);
-    objDefProp(Document.prototype, 'getElementsByTagNameNS', function getElementsByTagNameNS() {
-      try {
-        return this['&getElementsByTagNameNS'](...arguments);
-      } catch (e) {
-        console.warn(e);
-        return this['&getElementsByTagNameNS']('<>');
-      }
-    });
-  }
-
-  if (globalThis.Document?.prototype?.getElementsByName && !globalThis.Document?.prototype?.['&getElementsByName']) {
-    objDefProp(Document.prototype, '&getElementsByName', Document.prototype.getElementsByName);
-    objDefProp(Document.prototype, 'getElementsByName', function getElementsByName() {
-      try {
-        return this['&getElementsByName'](...arguments);
-      } catch (e) {
-        console.warn(e);
-        return this['&getElementsByTagName']('<>');
-      }
-    });
-  }
-
-
-  if (globalThis.Element?.prototype?.querySelector && !globalThis.Element?.prototype?.['&querySelector']) {
-    objDefProp(Element.prototype, '&querySelector', Element.prototype.querySelector);
-    objDefProp(Element.prototype, 'querySelector', function querySelector() {
-      try {
-        return this['&querySelector'](...arguments);
-      } catch (e) {
-        console.warn(e);
-        return null;
-      }
-    });
-  }
-
-  if (globalThis.Element?.prototype?.querySelectorAll && !globalThis.Element?.prototype?.['&querySelectorAll']) {
-    objDefProp(Element.prototype, '&querySelectorAll', Element.prototype.querySelectorAll);
-    objDefProp(Element.prototype, 'querySelectorAll', function querySelectorAll() {
-      try {
-        return this['&querySelectorAll'](...arguments);
-      } catch (e) {
-        console.warn(e);
-        return emptyNodeList();
-      }
-    });
-  }
-
-
-  if (globalThis.Element?.prototype?.getElementsByTagName && !globalThis.Element?.prototype?.['&getElementsByTagName']) {
-    objDefProp(Element.prototype, '&getElementsByTagName', Element.prototype.getElementsByTagName);
-    objDefProp(Element.prototype, 'getElementsByTagName', function getElementsByTagName() {
-      try {
-        return this['&getElementsByTagName'](...arguments);
-      } catch (e) {
-        console.warn(e);
-        return this['&getElementsByTagName']('<>');
-      }
-    });
-  }
-
-  if (globalThis.Element?.prototype?.getElementsByClassName && !globalThis.Element?.prototype?.['&getElementsByClassName']) {
-    objDefProp(Element.prototype, '&getElementsByClassName', Element.prototype.getElementsByClassName);
-    objDefProp(Element.prototype, 'getElementsByClassName', function getElementsByClassName() {
-      try {
-        return this['&getElementsByClassName'](...arguments);
-      } catch (e) {
-        console.warn(e);
-        return this['&getElementsByTagName']('<>');
-      }
-    });
-  }
-
-  if (globalThis.Element?.prototype?.getElementsByTagNameNS && !globalThis.Element?.prototype?.['&getElementsByTagNameNS']) {
-    objDefProp(Element.prototype, '&getElementsByTagNameNS', Element.prototype.getElementsByTagNameNS);
-    objDefProp(Element.prototype, 'getElementsByTagNameNS', function getElementsByTagNameNS() {
-      try {
-        return this['&getElementsByTagNameNS'](...arguments);
-      } catch (e) {
-        console.warn(e);
-        return this['&getElementsByTagNameNS']('<>');
-      }
-    });
-  }
-
-  if (globalThis.Element?.prototype?.getElementsByName && !globalThis.Element?.prototype?.['&getElementsByName']) {
-    objDefProp(Element.prototype, '&getElementsByName', Element.prototype.getElementsByName);
-    objDefProp(Element.prototype, 'getElementsByName', function getElementsByName() {
-      try {
-        return this['&getElementsByName'](...arguments);
-      } catch (e) {
-        console.warn(e);
-        return this['&getElementsByTagName']('<>');
-      }
-    });
-  }
-
-
-  if (globalThis.DocumentFragment?.prototype?.querySelector && !globalThis.DocumentFragment?.prototype?.['&querySelector']) {
-    objDefProp(DocumentFragment.prototype, '&querySelector', DocumentFragment.prototype.querySelector);
-    objDefProp(DocumentFragment.prototype, 'querySelector', function querySelector() {
-      try {
-        return this['&querySelector'](...arguments);
-      } catch (e) {
-        console.warn(e);
-        return null;
-      }
-    });
-  }
-
-  if (globalThis.DocumentFragment?.prototype?.querySelectorAll && !globalThis.DocumentFragment?.prototype?.['&querySelectorAll']) {
-    objDefProp(DocumentFragment.prototype, '&querySelectorAll', DocumentFragment.prototype.querySelectorAll);
-    objDefProp(DocumentFragment.prototype, 'querySelectorAll', function querySelectorAll() {
-      try {
-        return this['&querySelectorAll'](...arguments);
-      } catch (e) {
-        console.warn(e);
-        return emptyNodeList();
-      }
-    });
-  }
-
-  if (globalThis.DocumentFragment?.prototype?.getElementById && !globalThis.DocumentFragment?.prototype?.['&getElementById']) {
-    objDefProp(DocumentFragment.prototype, '&getElementById', DocumentFragment.prototype.getElementById);
-    objDefProp(DocumentFragment.prototype, 'getElementById', function getElementById() {
-      try {
-        return this['&getElementById'](...arguments);
-      } catch (e) {
-        console.warn(e);
-        return null;
-      }
-    });
-  }
-
-
-  if (globalThis.DocumentFragment?.prototype?.getElementsByTagName && !globalThis.DocumentFragment?.prototype?.['&getElementsByTagName']) {
-    objDefProp(DocumentFragment.prototype, '&getElementsByTagName', DocumentFragment.prototype.getElementsByTagName);
-    objDefProp(DocumentFragment.prototype, 'getElementsByTagName', function getElementsByTagName() {
-      try {
-        return this['&getElementsByTagName'](...arguments);
-      } catch (e) {
-        console.warn(e);
-        return this['&getElementsByTagName']('<>');
-      }
-    });
-  }
-
-
-  if (globalThis.DocumentFragment?.prototype?.getElementsByClassName && !globalThis.DocumentFragment?.prototype?.['&getElementsByClassName']) {
-    objDefProp(DocumentFragment.prototype, '&getElementsByClassName', DocumentFragment.prototype.getElementsByClassName);
-    objDefProp(DocumentFragment.prototype, 'getElementsByClassName', function getElementsByClassName() {
-      try {
-        return this['&getElementsByClassName'](...arguments);
-      } catch (e) {
-        console.warn(e);
-        return this['&getElementsByTagName']('<>');
-      }
-    });
-  }
-
-  if (globalThis.DocumentFragment?.prototype?.getElementsByTagNameNS && !globalThis.DocumentFragment?.prototype?.['&getElementsByTagNameNS']) {
-    objDefProp(DocumentFragment.prototype, '&getElementsByTagNameNS', DocumentFragment.prototype.getElementsByTagNameNS);
-    objDefProp(DocumentFragment.prototype, 'getElementsByTagNameNS', function getElementsByTagNameNS() {
-      try {
-        return this['&getElementsByTagNameNS'](...arguments);
-      } catch (e) {
-        console.warn(e);
-        return this['&getElementsByTagNameNS']('<>');
-      }
-    });
-  }
-
-  if (globalThis.DocumentFragment?.prototype?.getElementsByName && !globalThis.DocumentFragment?.prototype?.['&getElementsByName']) {
-    objDefProp(DocumentFragment.prototype, '&getElementsByName', DocumentFragment.prototype.getElementsByName);
-    objDefProp(DocumentFragment.prototype, 'getElementsByName', function getElementsByName() {
-      try {
-        return this['&getElementsByName'](...arguments);
-      } catch (e) {
-        console.warn(e);
-        return this['&getElementsByTagName']('<>');
-      }
-    });
-  }
-
-  
 }();

@@ -26,5 +26,8 @@ These objects can be called as a constructor without using the `new` keyword and
 ### `document.getElementById`
 `document.getElementById` returns `null` even when given an invalid query and prints the typical error as a warning
 
+### `document.getElementsById`
+`document.getElementsById` warns the user of a potential typo and returns 
+
 ### `document.getElementsByTagName`
 `document.getElementsBy(TagName|TagNameNS|ClassName|Name)` returns an empty `HTMLCollection` even when given an invalid query and prints the typical error as a warning
