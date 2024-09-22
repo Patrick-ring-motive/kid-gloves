@@ -1,5 +1,5 @@
 
-void function KidGloves() {
+void (function KidGloves() {
 
   const objDoProp = function(obj, prop, def, enm, mut) {
     return Object.defineProperty(obj, prop, {
@@ -159,7 +159,7 @@ void function KidGloves() {
   }
 
   function emptyNodeList() {
-    return document?.createDocumentFragment?.()?.querySelectorAll?.('*')??[]; 
+    return document?.createDocumentFragment?.()?.querySelectorAll?.('*') ?? [];
   }
 
   function makeNodes(nodeType) {
@@ -170,9 +170,9 @@ void function KidGloves() {
           return this['&querySelector'](...arguments);
         } catch (e) {
           console.warn(e);
-          try{
-            return this['&querySelector'](...[...arguments].map(x=>String(x)));
-          }catch(e){
+          try {
+            return this['&querySelector'](...[...arguments].map(x => String(x?.description ?? x)));
+          } catch (e) {
             console.warn(e);
             return null;
           }
@@ -187,9 +187,9 @@ void function KidGloves() {
           return this['&querySelectorAll'](...arguments);
         } catch (e) {
           console.warn(e);
-          try{
-            return this['&querySelectorAll'](...[...arguments].map(x=>String(x)));
-          }catch(e){
+          try {
+            return this['&querySelectorAll'](...[...arguments].map(x => String(x?.description ?? x)));
+          } catch (e) {
             console.warn(e);
             return emptyNodeList();
           }
@@ -205,7 +205,7 @@ void function KidGloves() {
         } catch (e) {
           console.warn(e);
           try {
-            return this['&getElementById'](...[...arguments].map(x=>String(x)));
+            return this['&getElementById'](...[...arguments].map(x => String(x?.description ?? x)));
           } catch (e) {
             console.warn(e);
             return null;
@@ -214,20 +214,19 @@ void function KidGloves() {
       });
     }
 
-    if (globalThis[nodeType]?.prototype?.getElementById && !globalThis[nodeType]?.prototype?.getElementsById){
-      objDefEnum(globalThis[nodeType].prototype, 'getElementsById', function getElementById(query) {
-      console.warn('getElementsById is not supported. Did you mean getElementById?');
-        try{
-        return this?.querySelectorAll?.(`[id="${String(query)}"]`);
+    if (globalThis[nodeType]?.prototype?.getElementById && !globalThis[nodeType]?.prototype?.getElementsById) {
+      objDefProp(globalThis[nodeType].prototype, 'getElementsById', function getElementById(query) {
+        console.warn('getElementsById is not supported. Did you mean getElementById?');
+        try {
+          return this?.querySelectorAll?.(`[id="${String(query)}"]`);
+        } catch (e) {
+          console.warn(e);
+          return emptyNodeList();
+        }
       });
-    }catch(e){
-      console.warn(e);
-      return emptyNodeList();
     }
-    }
-
-
     if (globalThis[nodeType]?.prototype?.getElementsByTagName && !globalThis[nodeType]?.prototype?.['&getElementsByTagName']) {
+
       objDefProp(globalThis[nodeType].prototype, '&getElementsByTagName', globalThis[nodeType].prototype.getElementsByTagName);
       objDefEnum(globalThis[nodeType].prototype, 'getElementsByTagName', function getElementsByTagName() {
         try {
@@ -235,14 +234,21 @@ void function KidGloves() {
         } catch (e) {
           console.warn(e);
           try {
-            return this['&getElementsByTagName'](...[...arguments].map(x=>String(x)));
+            return this['&getElementsByTagName'](...[...arguments].map(x => String(x?.description ?? x)));
           } catch (e) {
             console.warn(e);
-            return this['&getElementsByTagName']?.('<>')??[];
+            return this['&getElementsByTagName']?.('<>') ?? [];
           }
         }
       });
+      objDefProp(globalThis[nodeType].prototype, 'getElementByTagName', function getElementByTagName(query) {
+        console.warn('getElementByTagName is not supported. Did you mean getElementsByTagName?');
+        return this.getElementsByTagName?.(query)?.[0] ?? null;
+      });
+
+
     }
+
 
 
     if (globalThis[nodeType]?.prototype?.getElementsByClassName && !globalThis[nodeType]?.prototype?.['&getElementsByClassName']) {
@@ -253,14 +259,22 @@ void function KidGloves() {
         } catch (e) {
           console.warn(e);
           try {
-            return this['&getElementsByClassName'](...[...arguments].map(x=>String(x)));
+            return this['&getElementsByClassName'](...[...arguments].map(x => String(x?.description ?? x)));
           } catch (e) {
             console.warn(e);
-            return this['&getElementsByTagName']?.('<>')??[];
+            return this['&getElementsByTagName']?.('<>') ?? [];
           }
         }
       });
+      objDefProp(globalThis[nodeType].prototype, 'getElementByClassName', function getElementByClassName(query) {
+        console.warn('getElementByClassName is not supported. Did you mean getElementsByClassName?');
+        return this.getElementsByClassName?.(query)?.[0] ?? null;
+      });
+
+
     }
+
+
 
     if (globalThis[nodeType]?.prototype?.getElementsByTagNameNS && !globalThis[nodeType]?.prototype?.['&getElementsByTagNameNS']) {
       objDefProp(globalThis[nodeType].prototype, '&getElementsByTagNameNS', globalThis[nodeType].prototype.getElementsByTagNameNS);
@@ -270,12 +284,17 @@ void function KidGloves() {
         } catch (e) {
           console.warn(e);
           try {
-            return this['&getElementsByTagNameNS'](...[...arguments].map(x=>String(x)));
+            return this['&getElementsByTagNameNS'](...[...arguments].map(x => String(x?.description ?? x)));
           } catch (e) {
             console.warn(e);
-            return this['&getElementsByTagNameNS']?.('<>')[];
+            return this['&getElementsByTagNameNS']?.('<>')[0] ?? null;
           }
         }
+      });
+
+      objDefProp(globalThis[nodeType].prototype, 'getElementByTagNameNS', function getElementByTagNameNS(query) {
+        console.warn('getElementByTagNameNS is not supported. Did you mean getElementsByTagNameNS?');
+        return this.getElementsByTagNameNS?.(query)?.[0] ?? null;
       });
     }
 
@@ -287,12 +306,17 @@ void function KidGloves() {
         } catch (e) {
           console.warn(e);
           try {
-            return this['&getElementsByName'](...[...arguments].map(x=>String(x)));
+            return this['&getElementsByName'](...[...arguments].map(x => String(x?.description ?? x)));
           } catch (e) {
             console.warn(e);
-            return this['&getElementsByTagName']?.('<>')??[];
+            return this['&getElementsByTagName']?.('<>') ?? [];
           }
         }
+      });
+
+      objDefProp(globalThis[nodeType].prototype, 'getElementByName', function getElementByName(query) {
+        console.warn('getElementByName is not supported. Did you mean getElementsByName?');
+        return this.getElementsByName?.(query)?.[0] ?? null;
       });
     }
   }
@@ -301,5 +325,137 @@ void function KidGloves() {
   makeNodes('DocumentFragment');
 
 
+  if (Object.freeze && !Object['&freeze']) {
+    objDefProp(Object, '&freeze', Object.freeze);
+    objDefProp(Object, 'freeze', function freeze(obj) {
+      try {
+        return Object['&freeze'](obj);
+      } catch (e) {
+        console.warn(e);
+        try {
+          return Object['&freeze'](Object(obj));
+        } catch (e) {
+          console.warn(e);
+          return obj;
+        }
+      }
+    });
+  }
 
-}();
+  if (Object.seal && !Object['&seal']) {
+    objDefProp(Object, '&seal', Object.seal);
+    objDefProp(Object, 'seal', function seal(obj) {
+      try {
+        return Object['&seal'](obj);
+      } catch (e) {
+        console.warn(e);
+        try {
+          return Object['&seal'](Object(obj));
+        } catch (e) {
+          console.warn(e);
+          return obj;
+        }
+      }
+    });
+  }
+
+  if (Object.preventExtensions && !Object['&preventExtensions']) {
+    objDefProp(Object, '&preventExtensions', Object.preventExtensions);
+    objDefProp(Object, 'preventExtensions', function preventExtensions(obj) {
+      try {
+        return Object['&preventExtensions'](obj);
+      } catch (e) {
+        console.warn(e);
+        try {
+          return Object['&preventExtensions'](Object(obj));
+        } catch (e) {
+          console.warn(e);
+          return obj;
+        }
+      }
+    });
+  }
+  if (Object.create && !Object['&create']){
+    objDefProp(Object, '&create', Object.create);
+    objDefProp(Object, 'create', function create(proto, props) {
+      try {
+        return Object['&create'](proto, props);
+      } catch (e) {
+        console.warn(e);
+        try {
+          return Object['&create'](Object(proto), props);
+        } catch (e) {
+          console.warn(e);
+          return Object['&create'](null,props);
+        }
+      }
+    });
+  }
+  if (globalThis.parseFloat && !globalThis['&parseFloat']){
+    objDefProp(globalThis, '&parseFloat', globalThis.parseFloat);
+    objDefProp(globalThis, 'parseFloat', function parseFloat(str) {
+      try {
+        return globalThis['&parseFloat'](str);
+      } catch (e) {
+        console.warn(e);
+        try {
+          return globalThis['&parseFloat'](String(str.description ?? str));
+        } catch (e) {
+          console.warn(e);
+          return NaN;
+        }
+      }
+    });
+  }
+
+  if (globalThis.parseInt && !globalThis['&parseInt']){
+    objDefProp(globalThis, '&parseInt', globalThis.parseInt);
+    objDefProp(globalThis, 'parseInt', function parseInt(str) {
+      try {
+        return globalThis['&parseInt'](str);
+      } catch (e) {
+        console.warn(e);
+        try {
+          return globalThis['&parseInt'](String(str.description ?? str));
+        } catch (e) {
+          console.warn(e);
+          return NaN;
+        }
+      }
+    });
+  }
+
+  if (Number.parseFloat && !Number['&parseFloat']){
+    objDefProp(Number, '&parseFloat', Number.parseFloat);
+    objDefProp(Number, 'parseFloat', function parseFloat(str) {
+      try {
+        return Number['&parseFloat'](str);
+      } catch (e) {
+        console.warn(e);
+        try {
+          return Number['&parseFloat'](String(str.description ?? str));
+        } catch (e) {
+          console.warn(e);
+          return NaN;
+        }
+      }
+    });
+  }
+
+  if (Number.parseInt && !Number['&parseInt']){
+    objDefProp(Number, '&parseInt', Number.parseInt);
+    objDefProp(Number, 'parseInt', function parseInt(str) {
+      try {
+        return Number['&parseInt'](str);
+      } catch (e) {
+        console.warn(e);
+        try {
+          return Number['&parseInt'](String(str.description ?? str));
+        } catch (e) {
+          console.warn(e);
+          return NaN;
+        }
+      }
+    });
+  }
+})();

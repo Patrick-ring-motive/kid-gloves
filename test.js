@@ -10,8 +10,8 @@ void async function() {
 
   try {
     let x = new Set();
-    x.add('a');
-    document.querySelector('div').innerText = [...x];
+    x.add(document.getElementsByTagName('head'));
+    document.querySelector(Symbol('div')).innerText = document.getElementsByTagName('head');
   } catch (e) {
     document.querySelector('div').innerText = e.message
   }

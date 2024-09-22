@@ -31,3 +31,9 @@ These objects can be called as a constructor without using the `new` keyword and
 
 ### `document.getElementsByTagName`
 `document.getElementsBy(TagName|TagNameNS|ClassName|Name)` returns an empty `HTMLCollection` even when given an invalid query and prints the typical error as a warning
+
+### `Object.create`
+Gives a warning if the target prototype is not an object and attempts to coerce it into an object. If coercion fails then return `Object.create(null)`
+
+### `parseFloat`,`parseInt`,`Number.parseFloat`,`Number.parseInt`
+Attempts to safely coerce a Symbol into a string before parsing. If parsing fails for any reason it will return NaN.
