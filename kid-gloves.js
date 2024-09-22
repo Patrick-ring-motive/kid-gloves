@@ -165,56 +165,81 @@ void function KidGloves() {
   function makeNodes(nodeType) {
     if (globalThis[nodeType]?.prototype?.querySelector && !globalThis[nodeType]?.prototype?.['&querySelector']) {
       objDefProp(globalThis[nodeType].prototype, '&querySelector', globalThis[nodeType].prototype.querySelector);
-      objDefProp(globalThis[nodeType].prototype, 'querySelector', function querySelector() {
+      objDefEnum(globalThis[nodeType].prototype, 'querySelector', function querySelector() {
         try {
           return this['&querySelector'](...arguments);
         } catch (e) {
           console.warn(e);
-          return null;
+          try{
+            return this['&querySelector'](...[...arguments].map(x=>String(x)));
+          }catch(e){
+            console.warn(e);
+            return null;
+          }
         }
       });
     }
 
     if (globalThis[nodeType]?.prototype?.querySelectorAll && !globalThis[nodeType]?.prototype?.['&querySelectorAll']) {
       objDefProp(globalThis[nodeType].prototype, '&querySelectorAll', globalThis[nodeType].prototype.querySelectorAll);
-      objDefProp(globalThis[nodeType].prototype, 'querySelectorAll', function querySelectorAll() {
+      objDefEnum(globalThis[nodeType].prototype, 'querySelectorAll', function querySelectorAll() {
         try {
           return this['&querySelectorAll'](...arguments);
         } catch (e) {
           console.warn(e);
-          return emptyNodeList();
+          try{
+            return this['&querySelectorAll'](...[...arguments].map(x=>String(x)));
+          }catch(e){
+            console.warn(e);
+            return emptyNodeList();
+          }
         }
-      });
+      });;
     }
 
     if (globalThis[nodeType]?.prototype?.getElementById && !globalThis[nodeType]?.prototype?.['&getElementById']) {
       objDefProp(globalThis[nodeType].prototype, '&getElementById', globalThis[nodeType].prototype.getElementById);
-      objDefProp(globalThis[nodeType].prototype, 'getElementById', function getElementById() {
+      objDefEnum(globalThis[nodeType].prototype, 'getElementById', function getElementById() {
         try {
           return this['&getElementById'](...arguments);
         } catch (e) {
           console.warn(e);
-          return null;
+          try {
+            return this['&getElementById'](...[...arguments].map(x=>String(x)));
+          } catch (e) {
+            console.warn(e);
+            return null;
+          }
         }
       });
     }
 
     if (globalThis[nodeType]?.prototype?.getElementById && !globalThis[nodeType]?.prototype?.getElementsById){
-      objDefProp(globalThis[nodeType].prototype, 'getElementsById', function getElementById(query) {
+      objDefEnum(globalThis[nodeType].prototype, 'getElementsById', function getElementById(query) {
       console.warn('getElementsById is not supported. Did you mean getElementById?');
+        try{
         return this?.querySelectorAll?.(`[id="${String(query)}"]`);
       });
+    }catch(e){
+      console.warn(e);
+      return emptyNodeList();
+    }
     }
 
 
     if (globalThis[nodeType]?.prototype?.getElementsByTagName && !globalThis[nodeType]?.prototype?.['&getElementsByTagName']) {
       objDefProp(globalThis[nodeType].prototype, '&getElementsByTagName', globalThis[nodeType].prototype.getElementsByTagName);
-      objDefProp(globalThis[nodeType].prototype, 'getElementsByTagName', function getElementsByTagName() {
+      objDefEnum(globalThis[nodeType].prototype, 'getElementsByTagName', function getElementsByTagName() {
         try {
           return this['&getElementsByTagName'](...arguments);
         } catch (e) {
           console.warn(e);
-          return this['&getElementsByTagName']?.('<>')??[];
+          try {
+            return this['&getElementsByTagName'](...[...arguments].map(x=>String(x)));
+          } catch (e) {
+            console.warn(e);
+            return this['&getElementsByTagName']?.('<>')??[];
+          }
         }
       });
     }
@@ -222,36 +247,51 @@ void function KidGloves() {
 
     if (globalThis[nodeType]?.prototype?.getElementsByClassName && !globalThis[nodeType]?.prototype?.['&getElementsByClassName']) {
       objDefProp(globalThis[nodeType].prototype, '&getElementsByClassName', globalThis[nodeType].prototype.getElementsByClassName);
-      objDefProp(globalThis[nodeType].prototype, 'getElementsByClassName', function getElementsByClassName() {
+      objDefEnum(globalThis[nodeType].prototype, 'getElementsByClassName', function getElementsByClassName() {
         try {
           return this['&getElementsByClassName'](...arguments);
         } catch (e) {
           console.warn(e);
-          return this['&getElementsByTagName']?.('<>')??[];
+          try {
+            return this['&getElementsByClassName'](...[...arguments].map(x=>String(x)));
+          } catch (e) {
+            console.warn(e);
+            return this['&getElementsByTagName']?.('<>')??[];
+          }
         }
       });
     }
 
     if (globalThis[nodeType]?.prototype?.getElementsByTagNameNS && !globalThis[nodeType]?.prototype?.['&getElementsByTagNameNS']) {
       objDefProp(globalThis[nodeType].prototype, '&getElementsByTagNameNS', globalThis[nodeType].prototype.getElementsByTagNameNS);
-      objDefProp(globalThis[nodeType].prototype, 'getElementsByTagNameNS', function getElementsByTagNameNS() {
+      objDefEnum(globalThis[nodeType].prototype, 'getElementsByTagNameNS', function getElementsByTagNameNS() {
         try {
           return this['&getElementsByTagNameNS'](...arguments);
         } catch (e) {
           console.warn(e);
-          return this['&getElementsByTagNameNS']?.('<>')[];
+          try {
+            return this['&getElementsByTagNameNS'](...[...arguments].map(x=>String(x)));
+          } catch (e) {
+            console.warn(e);
+            return this['&getElementsByTagNameNS']?.('<>')[];
+          }
         }
       });
     }
 
     if (globalThis[nodeType]?.prototype?.getElementsByName && !globalThis[nodeType]?.prototype?.['&getElementsByName']) {
       objDefProp(globalThis[nodeType].prototype, '&getElementsByName', globalThis[nodeType].prototype.getElementsByName);
-      objDefProp(globalThis[nodeType].prototype, 'getElementsByName', function getElementsByName() {
+      objDefEnum(globalThis[nodeType].prototype, 'getElementsByName', function getElementsByName() {
         try {
           return this['&getElementsByName'](...arguments);
         } catch (e) {
           console.warn(e);
-          return this['&getElementsByTagName']?.('<>')??[];
+          try {
+            return this['&getElementsByName'](...[...arguments].map(x=>String(x)));
+          } catch (e) {
+            console.warn(e);
+            return this['&getElementsByTagName']?.('<>')??[];
+          }
         }
       });
     }
