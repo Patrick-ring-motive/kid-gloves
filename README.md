@@ -9,7 +9,7 @@ Kid Gloves patches a bunch of JS quirks that potentially throw errors and turns 
 Note: This only aims to patch errors where the alternative outcome is obvious and doesn't change the existing behavior. So while functions like `JSON.parse` commonly error, there is no way to determine an appropriate return value without drastically changing behavior. `document.querySelector` on the other hand, already has a value for when the query fails to match an element and this makes a good alternative to throwing an error.
 
 ## Installation:
-Stick this url in a script tag just above the code you want to debug `https://unpkg.com/kid-gloves@0.0.4/kid-gloves.js` like so;
+Stick this url in a script tag just above the code you want to debug `https://unpkg.com/kid-gloves/kid-gloves.js` like so;
 
 ```html
 <!DOCTYPE html>
