@@ -1,0 +1,408 @@
+Certainly! Here are some questions designed to help you evaluate your fine-tuned Llama 2 model:
+
+A. Questions to Test the Model's New Knowledge from USAAEF.org
+What financial education resources does the USAA Educational Foundation offer to military families?
+
+Can you explain the budgeting tools recommended by the USAA Educational Foundation?
+
+What are some unique financial challenges faced by military personnel, according to USAAEF?
+
+How does the USAA Educational Foundation suggest service members plan for retirement?
+
+What advice does USAAEF provide regarding insurance needs for military families?
+
+Describe the USAAEF's recommendations on managing debt while serving in the military.
+
+What educational materials does USAAEF offer on understanding the Servicemembers Civil Relief Act (SCRA)?
+
+How does the USAA Educational Foundation advise on preparing for deployment financially?
+
+What is the USAAEF's stance on the importance of emergency funds for military members?
+
+Can you summarize the USAAEF's guidance on transitioning to civilian life financially?
+
+B. General Questions to Ensure Overall Model Performance
+What is the difference between a traditional IRA and a Roth IRA?
+
+How does compound interest work, and why is it important for long-term savings?
+
+What are effective strategies for creating and sticking to a personal budget?
+
+Can you explain the concept of asset allocation in investment portfolios?
+
+What factors should one consider when planning for retirement?
+
+How does inflation impact purchasing power over time?
+
+What are the benefits and risks of using credit cards?
+
+Explain the significance of maintaining a good credit score.
+
+What are some common methods for paying off debt effectively?
+
+How does diversification reduce risk in an investment portfolio?
+
+By asking these questions to both the base Llama 2 model and your fine-tuned version, you can compare their responses to assess improvements in domain-specific knowledge and ensure that general capabilities remain intact.
+
+Tips for Evaluation:
+
+Relevance and Accuracy: Check if the answers are accurate and relevant to the questions asked.
+
+Depth of Explanation: Evaluate whether the model provides detailed explanations or merely surface-level information.
+
+Specificity to USAAEF Content: For section A, see if the model references specific programs, advice, or resources from USAAEF.
+
+Consistency in Style and Tone: Ensure that the fine-tuning hasn't altered the model's ability to generate coherent and professional responses.
+
+Feel free to adjust or expand upon these questions to better suit your evaluation criteria.
+
+
+
+
+
+
+You said:
+These are good but I could use a lot more
+ChatGPT
+
+Thought for 25 seconds
+
+Certainly! Here are additional questions to help you thoroughly evaluate your fine-tuned Llama 2 model.
+
+A. Expanded Questions to Test the Model's New Knowledge from USAAEF.org
+1. Financial Education Resources
+What types of educational workshops does the USAA Educational Foundation offer?
+
+How can individuals access the free publications provided by the USAA Educational Foundation?
+
+Describe the mission and core values of the USAA Educational Foundation.
+
+What online tools are available through USAAEF for financial planning?
+
+How does USAAEF support financial literacy within the military community?
+
+What partnerships has USAAEF formed to enhance financial education?
+
+How does USAAEF tailor its resources for different life stages of service members?
+
+What is the process for ordering printed materials from USAAEF?
+
+Can you explain the USAAEF's approach to digital learning and webinars?
+
+How does the USAA Educational Foundation measure the impact of its educational programs?
+
+2. Military-Specific Financial Guidance
+What advice does USAAEF give about utilizing the Thrift Savings Plan (TSP)?
+
+How does USAAEF recommend military families handle Permanent Change of Station (PCS) moves financially?
+
+What strategies does USAAEF suggest for managing finances during deployment?
+
+How does USAAEF advise service members on maximizing military benefits?
+
+What guidance does USAAEF offer regarding the Blended Retirement System (BRS)?
+
+What does USAAEF say about the financial implications of re-enlistment bonuses?
+
+How does USAAEF suggest service members prepare financially for separation or retirement?
+
+What are USAAEF's recommendations for managing housing allowances effectively?
+
+How does USAAEF address the challenges of overseas assignments?
+
+What financial tips does USAAEF provide for reservists and National Guard members?
+
+3. Insurance and Risk Management
+What types of insurance does USAAEF suggest are essential for military families?
+
+How does USAAEF explain the importance of life insurance for service members?
+
+What is USAAEF's advice on renters insurance for those living in military housing?
+
+How does USAAEF recommend evaluating auto insurance needs?
+
+What resources does USAAEF provide on understanding property insurance?
+
+What guidance does USAAEF offer on liability insurance?
+
+How does USAAEF advise on selecting appropriate health insurance plans?
+
+What is USAAEF's stance on umbrella insurance policies?
+
+How does USAAEF suggest protecting assets against natural disasters?
+
+What does USAAEF recommend regarding travel insurance for military personnel?
+
+4. Debt Management and Credit
+What strategies does USAAEF suggest for improving credit scores?
+
+How does USAAEF advise on avoiding predatory lenders?
+
+What are USAAEF's tips for managing student loan debt?
+
+Describe USAAEF's approach to using credit cards responsibly.
+
+What guidance does USAAEF offer on consolidating debt?
+
+How does USAAEF explain the impact of debt on long-term financial health?
+
+What educational materials does USAAEF provide about credit reports and monitoring?
+
+How does USAAEF recommend negotiating with creditors?
+
+What does USAAEF say about the risks of payday loans?
+
+How does USAAEF suggest handling identity theft and fraud?
+
+5. Saving and Investing
+What saving strategies does USAAEF recommend for short-term goals?
+
+How does USAAEF explain the benefits of starting to invest early?
+
+What educational materials does USAAEF provide on mutual funds and ETFs?
+
+How does USAAEF suggest building an emergency fund?
+
+What is USAAEF's advice on saving for children's education?
+
+What guidance does USAAEF offer on retirement planning for military personnel?
+
+How does USAAEF recommend balancing saving and debt repayment?
+
+What does USAAEF say about investing in the stock market?
+
+How does USAAEF explain the concept of compound interest?
+
+What investment risks does USAAEF caution against?
+
+6. Transitioning to Civilian Life
+What financial steps does USAAEF recommend before leaving the military?
+
+How does USAAEF advise on translating military skills to civilian job markets financially?
+
+What are USAAEF's tips for negotiating salary and benefits in civilian jobs?
+
+How does USAAEF suggest managing retirement accounts after military service?
+
+What resources does USAAEF offer for veterans starting their own businesses?
+
+What does USAAEF recommend regarding healthcare coverage post-service?
+
+How does USAAEF advise on relocation expenses during transition?
+
+What financial considerations does USAAEF highlight for education and retraining?
+
+How does USAAEF suggest handling changes in income during transition?
+
+What is USAAEF's guidance on networking and professional development?
+
+7. Legal Protections and Benefits
+Explain how the Servicemembers Civil Relief Act (SCRA) protects military members financially, according to USAAEF.
+
+What does USAAEF say about the Military Lending Act (MLA)?
+
+How does USAAEF advise service members to utilize GI Bill benefits wisely?
+
+What information does USAAEF provide on Social Security benefits for military personnel?
+
+Describe USAAEF's guidance on understanding military tax benefits.
+
+What does USAAEF explain about veterans' benefits and how to access them?
+
+How does USAAEF address the importance of wills and legal documents?
+
+What resources does USAAEF offer regarding consumer protection laws?
+
+How does USAAEF recommend resolving financial disputes?
+
+What guidance does USAAEF provide on legal assistance available to service members?
+
+8. Family and Lifestyle Financial Planning
+What budgeting advice does USAAEF offer for newly married military couples?
+
+How does USAAEF recommend planning for the financial needs of children with special needs?
+
+What guidance does USAAEF give on estate planning for military families?
+
+How does USAAEF suggest handling financial challenges during long-term separations?
+
+What are USAAEF's recommendations for teaching children about money?
+
+How does USAAEF advise on balancing work and family life financially?
+
+What does USAAEF say about the financial implications of divorce in military families?
+
+How does USAAEF recommend celebrating milestones without overspending?
+
+What tips does USAAEF provide for holiday budgeting?
+
+How does USAAEF address the financial aspects of caregiving for elderly family members?
+
+B. Additional General Questions to Ensure Overall Model Performance
+1. Personal Finance Basics
+What is the importance of having an emergency fund, and how much should it typically cover?
+
+Explain the concept of the time value of money.
+
+How do you calculate your net worth?
+
+What are the differences between fixed and variable expenses in budgeting?
+
+Why is it important to set financial goals?
+
+How can automating finances help in managing money effectively?
+
+What is the 50/30/20 budgeting rule?
+
+How does lifestyle inflation impact long-term savings?
+
+What are the benefits of tracking expenses regularly?
+
+Explain the concept of opportunity cost in personal finance.
+
+2. Banking and Saving
+What are the advantages and disadvantages of high-yield savings accounts?
+
+Explain the difference between a checking account and a savings account.
+
+What is a certificate of deposit (CD), and how does it work?
+
+How does a money market account differ from a regular savings account?
+
+What factors should you consider when choosing a bank or credit union?
+
+What is FDIC insurance, and why is it important?
+
+How do online banks differ from traditional brick-and-mortar banks?
+
+What fees should consumers be aware of when selecting banking services?
+
+Explain the purpose of a bank reconciliation.
+
+What is a safe deposit box, and what items should be stored there?
+
+3. Investing
+What is dollar-cost averaging in investing, and what are its benefits?
+
+Explain the differences between stocks and bonds.
+
+What is an index fund, and why might an investor choose one?
+
+How do mutual funds differ from exchange-traded funds (ETFs)?
+
+What is the significance of diversification in an investment portfolio?
+
+What are dividends, and how do they affect investment returns?
+
+Explain the concept of risk tolerance in investing.
+
+What is the difference between active and passive investing?
+
+How do tax-advantaged accounts benefit investors?
+
+What is a portfolio rebalancing, and why is it important?
+
+4. Credit and Debt
+What is the debt-to-income ratio, and why is it important?
+
+How do installment loans differ from revolving credit?
+
+What are the consequences of defaulting on a loan?
+
+Explain how interest rates affect loan repayments over time.
+
+What strategies can help in negotiating lower interest rates on existing debts?
+
+What is a credit utilization ratio, and how does it impact credit scores?
+
+How can balance transfers be used in managing credit card debt?
+
+What are the benefits and risks of co-signing a loan?
+
+Explain the difference between secured and unsecured loans.
+
+What is bankruptcy, and what are its long-term effects on personal finance?
+
+5. Retirement Planning
+What are the key features of a 401(k) retirement plan?
+
+How does Social Security work, and what factors influence the benefits received?
+
+What is an annuity, and how can it be used in retirement planning?
+
+Explain the concept of required minimum distributions (RMDs).
+
+What are catch-up contributions in retirement accounts?
+
+How does a Roth IRA differ from a traditional IRA in terms of tax treatment?
+
+What is the "4% rule" in retirement planning?
+
+How can one estimate the amount needed to retire comfortably?
+
+What role does inflation play in retirement planning?
+
+Explain the benefits of employer matching in retirement accounts.
+
+6. Taxes
+What is the difference between tax deductions and tax credits?
+
+Explain how progressive taxation works.
+
+What are capital gains taxes, and when do they apply?
+
+How can contributing to a traditional IRA affect your taxable income?
+
+What is a W-4 form, and why is it important for employees?
+
+What are estimated taxes, and who needs to pay them?
+
+Explain the purpose of a 1099 form.
+
+How do standard deductions differ from itemized deductions?
+
+What tax benefits are available for homeowners?
+
+What is tax-loss harvesting in investment strategies?
+
+7. Insurance
+Why is health insurance important, and what are some common types?
+
+Explain the difference between term life and whole life insurance.
+
+What factors influence auto insurance premiums?
+
+What is disability insurance, and who should consider it?
+
+How does homeowners insurance protect property owners?
+
+What is an insurance deductible, and how does it affect premiums?
+
+What is long-term care insurance, and when should one consider it?
+
+How do insurance riders enhance standard insurance policies?
+
+What is the purpose of an insurance policy's exclusion clauses?
+
+Explain the concept of insurable interest in insurance contracts.
+
+8. Economics and Market Concepts
+What is inflation, and how is it measured?
+
+Explain the concept of supply and demand.
+
+What are the effects of interest rate changes on the economy?
+
+How do exchange rates impact international trade?
+
+What is a recession, and what are its typical indicators?
+
+What is gross domestic product (GDP), and why is it important?
+
+Explain the difference between monetary policy and fiscal policy.
+
+What are economic cycles, and what phases do they include?
+
+How does unemployment affect economic growth?
+
+What is the Consumer Price Index (CPI), and how is it used?
