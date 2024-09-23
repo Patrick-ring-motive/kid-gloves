@@ -324,7 +324,6 @@ void (function KidGloves() {
   makeNodes('Element');
   makeNodes('DocumentFragment');
 
-
   if (Object.freeze && !Object['&freeze']) {
     objDefProp(Object, '&freeze', Object.freeze);
     objDefProp(Object, 'freeze', function freeze(obj) {
@@ -458,4 +457,221 @@ void (function KidGloves() {
       }
     });
   }
+  if (document.write && !document['&write']){
+    objDefProp(document, '&write', document.write);
+    objDefProp(document, 'write', function write(str) {
+      try {
+        return document['&write'](str);
+      } catch (e) {
+        console.warn(e);
+        try {
+          return document['&write'](String(str.description ?? str));
+        } catch (e) {
+          console.warn(e);
+          return NaN;
+        }
+      }
+    });
+  }
+
+  if (globalThis?.EventTarget?.prototype?.addEventListener && !globalThis?.EventTarget?.prototype?.['&addEventListener']){
+    objDefProp(EventTarget.prototype, '&addEventListener', EventTarget.prototype.addEventListener);
+    objDefProp(EventTarget.prototype, 'addEventListener', function addEventListener(str) {
+      try {
+        return this['&addEventListener'](...arguments);
+      } catch (e) {
+        console.warn(e);
+        try {
+          const args = [...arguments];
+          args[0] = String(args[0].description ?? args[0]);
+          return this['&addEventListener'](...args);
+        } catch (e) {
+          console.warn(e);
+          try {
+            const args = [...arguments];
+            args[0] = String(args[0].description ?? args[0]);
+            args[1] = ()=>(args[1]?.call?.(this, ...arguments)??Object(args[1]));
+            return this['&addEventListener'](...args);
+          } catch (e) {
+            return console.warn(e);
+          }
+        }
+      }
+    });
+  }  if (Object.freeze && !Object['&freeze']) {
+    objDefProp(Object, '&freeze', Object.freeze);
+    objDefProp(Object, 'freeze', function freeze(obj) {
+      try {
+        return Object['&freeze'](obj);
+      } catch (e) {
+        console.warn(e);
+        try {
+          return Object['&freeze'](Object(obj));
+        } catch (e) {
+          console.warn(e);
+          return obj;
+        }
+      }
+    });
+  }
+
+  if (Object.seal && !Object['&seal']) {
+    objDefProp(Object, '&seal', Object.seal);
+    objDefProp(Object, 'seal', function seal(obj) {
+      try {
+        return Object['&seal'](obj);
+      } catch (e) {
+        console.warn(e);
+        try {
+          return Object['&seal'](Object(obj));
+        } catch (e) {
+          console.warn(e);
+          return obj;
+        }
+      }
+    });
+  }
+
+  if (Object.preventExtensions && !Object['&preventExtensions']) {
+    objDefProp(Object, '&preventExtensions', Object.preventExtensions);
+    objDefProp(Object, 'preventExtensions', function preventExtensions(obj) {
+      try {
+        return Object['&preventExtensions'](obj);
+      } catch (e) {
+        console.warn(e);
+        try {
+          return Object['&preventExtensions'](Object(obj));
+        } catch (e) {
+          console.warn(e);
+          return obj;
+        }
+      }
+    });
+  }
+  if (Object.create && !Object['&create']){
+    objDefProp(Object, '&create', Object.create);
+    objDefProp(Object, 'create', function create(proto, props) {
+      try {
+        return Object['&create'](proto, props);
+      } catch (e) {
+        console.warn(e);
+        try {
+          return Object['&create'](Object(proto), props);
+        } catch (e) {
+          console.warn(e);
+          return Object['&create'](null,props);
+        }
+      }
+    });
+  }
+  if (globalThis.parseFloat && !globalThis['&parseFloat']){
+    objDefProp(globalThis, '&parseFloat', globalThis.parseFloat);
+    objDefProp(globalThis, 'parseFloat', function parseFloat(str) {
+      try {
+        return globalThis['&parseFloat'](str);
+      } catch (e) {
+        console.warn(e);
+        try {
+          return globalThis['&parseFloat'](String(str.description ?? str));
+        } catch (e) {
+          console.warn(e);
+          return NaN;
+        }
+      }
+    });
+  }
+
+  if (globalThis.parseInt && !globalThis['&parseInt']){
+    objDefProp(globalThis, '&parseInt', globalThis.parseInt);
+    objDefProp(globalThis, 'parseInt', function parseInt(str) {
+      try {
+        return globalThis['&parseInt'](str);
+      } catch (e) {
+        console.warn(e);
+        try {
+          return globalThis['&parseInt'](String(str.description ?? str));
+        } catch (e) {
+          console.warn(e);
+          return NaN;
+        }
+      }
+    });
+  }
+
+  if (Number.parseFloat && !Number['&parseFloat']){
+    objDefProp(Number, '&parseFloat', Number.parseFloat);
+    objDefProp(Number, 'parseFloat', function parseFloat(str) {
+      try {
+        return Number['&parseFloat'](str);
+      } catch (e) {
+        console.warn(e);
+        try {
+          return Number['&parseFloat'](String(str.description ?? str));
+        } catch (e) {
+          console.warn(e);
+          return NaN;
+        }
+      }
+    });
+  }
+
+  if (Number.parseInt && !Number['&parseInt']){
+    objDefProp(Number, '&parseInt', Number.parseInt);
+    objDefProp(Number, 'parseInt', function parseInt(str) {
+      try {
+        return Number['&parseInt'](str);
+      } catch (e) {
+        console.warn(e);
+        try {
+          return Number['&parseInt'](String(str.description ?? str));
+        } catch (e) {
+          console.warn(e);
+          return NaN;
+        }
+      }
+    });
+  }
+  if (document.write && !document['&write']){
+    objDefProp(document, '&write', document.write);
+    objDefProp(document, 'write', function write(str) {
+      try {
+        return document['&write'](str);
+      } catch (e) {
+        console.warn(e);
+        try {
+          return document['&write'](String(str.description ?? str));
+        } catch (e) {
+          console.warn(e);
+          return NaN;
+        }
+      }
+    });
+  }
+
+  if (globalThis?.EventTarget?.prototype?.addEventListener && !globalThis?.EventTarget?.prototype?.['&addEventListener']){
+    objDefProp(EventTarget.prototype, '&addEventListener', EventTarget.prototype.addEventListener);
+    objDefProp(EventTarget.prototype, 'addEventListener', function addEventListener() {
+      try {
+        return this['&addEventListener'](...arguments);
+      } catch (e) {
+        console.warn(e);
+        try {
+          const args = [...arguments];
+          args[0] = String(args[0].description ?? args[0]);
+          return this['&addEventListener'](...args);
+        } catch (e) {
+          console.warn(e);
+          try {
+            const args = [...arguments];
+            args[0] = String(args[0].description ?? args[0]);
+            args[1] = ()=>args[1]?.();
+            return this['&addEventListener'](...args);
+          } catch (e) {
+            return console.warn(e);
+          }
+        }
+      }
+    });
+  }
+ 
 })();
