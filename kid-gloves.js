@@ -218,7 +218,7 @@ void (function KidGloves() {
       objDefProp(globalThis[nodeType].prototype, 'getElementsById', function getElementById(query) {
         console.warn('getElementsById is not supported. Did you mean getElementById?');
         try {
-          return this?.querySelectorAll?.(`[id="${String(query)}"]`);
+          return this?.querySelectorAll?.(`[id="${String(query.description ?? query)}"]`);
         } catch (e) {
           console.warn(e);
           return emptyNodeList();
