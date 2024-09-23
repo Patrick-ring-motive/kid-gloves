@@ -64,4 +64,4 @@ Attempts to safely coerce a Symbol into a string before parsing. If parsing fail
 Many functions that expect a string will attempt to coerce inputs into strings. The default coercion for Symbol into string throws an error. Many of these have been patched to do a safe coercion from Symbol to String and printing a warning to the console. The typical coercion takes the form of `String(sym.description ?? sym)`
 
 ### Object Coercion
-Some functions expect an object as input and will throw an error when passed a literal. That error is printed as a warning and the literal will be converted to an object using `Object()
+Some functions expect an object as input and will throw an error when passed a literal. That error is printed as a warning and the literal will be converted to an object using `Object()`
