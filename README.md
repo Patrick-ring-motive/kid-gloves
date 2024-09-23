@@ -24,6 +24,9 @@ Stick this url in a script tag just above the code you want to debug `https://un
 </html>
 ```
 
+Normally this code would error and present a blank page but this runs and the errors are converted into warnings.
+![https://raw.githubusercontent.com/Patrick-ring-motive/kid-gloves/refs/heads/main/example.png](https://raw.githubusercontent.com/Patrick-ring-motive/kid-gloves/refs/heads/main/example.png)
+
 Fixes So far:
 
 ### Use `new` with `BigInt` and `Symbol`
@@ -53,3 +56,9 @@ Gives a warning if the target prototype is not an object and attempts to coerce 
 
 ### `parseFloat`,`parseInt`,`Number.parseFloat`,`Number.parseInt`
 Attempts to safely coerce a Symbol into a string before parsing. If parsing fails for any reason it will return NaN.
+
+### Symbol Coercion
+Many functions that expect a string will attempt to coerce inputs into strings. The default coercion for Symbol into string throws an error. Many of these have been patched to do a safe coercion from Symbol to String and printing a warning to the console. The typical coercion takes the form of `String(sym.description ?? sym)`
+
+### Object Coercion
+Some functions expect an object as input and will throw an error when passed a literal. That error is printed as a warning and the literal will be converted to an object using `Object()
