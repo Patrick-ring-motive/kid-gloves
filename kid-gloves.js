@@ -109,6 +109,24 @@ void (function KidGloves() {
       return map;
     }
     Object.setPrototypeOf(Map, globalThis['&Map']);
+
+
+  }
+
+  if (globalThis.Map?.prototype && !globalThis.Map?.prototype?.['&get']) {
+    objDefProp(globalThis.Map.prototype, '&get', new Map().get);
+    objDefProp(globalThis.Map.prototype, 'get', function get(key) {
+      if (!this.has(key)) {
+        return console.warn(`No element found in Map for key: ${key}`);
+      }
+      try {
+        return this['&get'](key);
+      } catch (e) {
+        return console.warn(e);
+      }
+    });
+    objDefProp(globalThis['&Map'].prototype, '&get', Map.prototype['&get']);
+    objDefProp(globalThis['&Map'].prototype, 'get', new Map().get);
   }
 
   if (globalThis.Set && !globalThis['&Set']) {
@@ -374,7 +392,7 @@ void (function KidGloves() {
       }
     });
   }
-  if (Object.create && !Object['&create']){
+  if (Object.create && !Object['&create']) {
     objDefProp(Object, '&create', Object.create);
     objDefProp(Object, 'create', function create(proto, props) {
       try {
@@ -385,12 +403,12 @@ void (function KidGloves() {
           return Object['&create'](Object(proto), props);
         } catch (e) {
           console.warn(e);
-          return Object['&create'](null,props);
+          return Object['&create'](null, props);
         }
       }
     });
   }
-  if (globalThis.parseFloat && !globalThis['&parseFloat']){
+  if (globalThis.parseFloat && !globalThis['&parseFloat']) {
     objDefProp(globalThis, '&parseFloat', globalThis.parseFloat);
     objDefProp(globalThis, 'parseFloat', function parseFloat(str) {
       try {
@@ -407,7 +425,7 @@ void (function KidGloves() {
     });
   }
 
-  if (globalThis.parseInt && !globalThis['&parseInt']){
+  if (globalThis.parseInt && !globalThis['&parseInt']) {
     objDefProp(globalThis, '&parseInt', globalThis.parseInt);
     objDefProp(globalThis, 'parseInt', function parseInt(str) {
       try {
@@ -424,7 +442,7 @@ void (function KidGloves() {
     });
   }
 
-  if (Number.parseFloat && !Number['&parseFloat']){
+  if (Number.parseFloat && !Number['&parseFloat']) {
     objDefProp(Number, '&parseFloat', Number.parseFloat);
     objDefProp(Number, 'parseFloat', function parseFloat(str) {
       try {
@@ -441,7 +459,7 @@ void (function KidGloves() {
     });
   }
 
-  if (Number.parseInt && !Number['&parseInt']){
+  if (Number.parseInt && !Number['&parseInt']) {
     objDefProp(Number, '&parseInt', Number.parseInt);
     objDefProp(Number, 'parseInt', function parseInt(str) {
       try {
@@ -457,7 +475,7 @@ void (function KidGloves() {
       }
     });
   }
-  if (document.write && !document['&write']){
+  if (document.write && !document['&write']) {
     objDefProp(document, '&write', document.write);
     objDefProp(document, 'write', function write(str) {
       try {
@@ -474,7 +492,7 @@ void (function KidGloves() {
     });
   }
 
-  if (globalThis?.EventTarget?.prototype?.addEventListener && !globalThis?.EventTarget?.prototype?.['&addEventListener']){
+  if (globalThis?.EventTarget?.prototype?.addEventListener && !globalThis?.EventTarget?.prototype?.['&addEventListener']) {
     objDefProp(EventTarget.prototype, '&addEventListener', EventTarget.prototype.addEventListener);
     objDefProp(EventTarget.prototype, 'addEventListener', function addEventListener(str) {
       try {
@@ -490,7 +508,7 @@ void (function KidGloves() {
           try {
             const args = [...arguments];
             args[0] = String(args[0].description ?? args[0]);
-            args[1] = ()=>(args[1]?.call?.(this, ...arguments)??Object(args[1]));
+            args[1] = () => (args[1]?.call?.(this, ...arguments) ?? Object(args[1]));
             return this['&addEventListener'](...args);
           } catch (e) {
             return console.warn(e);
@@ -498,7 +516,7 @@ void (function KidGloves() {
         }
       }
     });
-  }  if (Object.freeze && !Object['&freeze']) {
+  } if (Object.freeze && !Object['&freeze']) {
     objDefProp(Object, '&freeze', Object.freeze);
     objDefProp(Object, 'freeze', function freeze(obj) {
       try {
@@ -548,7 +566,7 @@ void (function KidGloves() {
       }
     });
   }
-  if (Object.create && !Object['&create']){
+  if (Object.create && !Object['&create']) {
     objDefProp(Object, '&create', Object.create);
     objDefProp(Object, 'create', function create(proto, props) {
       try {
@@ -559,12 +577,12 @@ void (function KidGloves() {
           return Object['&create'](Object(proto), props);
         } catch (e) {
           console.warn(e);
-          return Object['&create'](null,props);
+          return Object['&create'](null, props);
         }
       }
     });
   }
-  if (globalThis.parseFloat && !globalThis['&parseFloat']){
+  if (globalThis.parseFloat && !globalThis['&parseFloat']) {
     objDefProp(globalThis, '&parseFloat', globalThis.parseFloat);
     objDefProp(globalThis, 'parseFloat', function parseFloat(str) {
       try {
@@ -581,7 +599,7 @@ void (function KidGloves() {
     });
   }
 
-  if (globalThis.parseInt && !globalThis['&parseInt']){
+  if (globalThis.parseInt && !globalThis['&parseInt']) {
     objDefProp(globalThis, '&parseInt', globalThis.parseInt);
     objDefProp(globalThis, 'parseInt', function parseInt(str) {
       try {
@@ -598,7 +616,7 @@ void (function KidGloves() {
     });
   }
 
-  if (Number.parseFloat && !Number['&parseFloat']){
+  if (Number.parseFloat && !Number['&parseFloat']) {
     objDefProp(Number, '&parseFloat', Number.parseFloat);
     objDefProp(Number, 'parseFloat', function parseFloat(str) {
       try {
@@ -615,7 +633,7 @@ void (function KidGloves() {
     });
   }
 
-  if (Number.parseInt && !Number['&parseInt']){
+  if (Number.parseInt && !Number['&parseInt']) {
     objDefProp(Number, '&parseInt', Number.parseInt);
     objDefProp(Number, 'parseInt', function parseInt(str) {
       try {
@@ -631,7 +649,7 @@ void (function KidGloves() {
       }
     });
   }
-  if (document.write && !document['&write']){
+  if (document.write && !document['&write']) {
     objDefProp(document, '&write', document.write);
     objDefProp(document, 'write', function write(str) {
       try {
@@ -648,7 +666,7 @@ void (function KidGloves() {
     });
   }
 
-  if (globalThis?.EventTarget?.prototype?.addEventListener && !globalThis?.EventTarget?.prototype?.['&addEventListener']){
+  if (globalThis?.EventTarget?.prototype?.addEventListener && !globalThis?.EventTarget?.prototype?.['&addEventListener']) {
     objDefProp(EventTarget.prototype, '&addEventListener', EventTarget.prototype.addEventListener);
     objDefProp(EventTarget.prototype, 'addEventListener', function addEventListener() {
       try {
@@ -664,7 +682,7 @@ void (function KidGloves() {
           try {
             const args = [...arguments];
             args[0] = String(args[0].description ?? args[0]);
-            args[1] = ()=>args[1]?.();
+            args[1] = () => args[1]?.();
             return this['&addEventListener'](...args);
           } catch (e) {
             return console.warn(e);
@@ -673,5 +691,5 @@ void (function KidGloves() {
       }
     });
   }
- 
+
 })();

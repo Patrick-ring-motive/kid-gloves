@@ -35,6 +35,9 @@ Using the `new` keyword returns an Object wrapped version of `BigInt` and `Sybmo
 ### Use `Promise`, `Set`, and `Map`
 These objects can be called as a constructor without using the `new` keyword and prints a warning
 
+### Missing Map element
+Attempting to access a Map element that does not exist prints a warning
+
 ### `document.querySelector`
 `document.querySelector` returns `null` even when given an invalid query and prints the typical error as a warning
 
