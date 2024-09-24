@@ -598,7 +598,22 @@ void (function KidGloves() {
       }
     });
   }
-
+  if (globalThis.isNaN && !globalThis['&isNaN']) {
+    objDefProp(globalThis, '&isNaN', globalThis.isNaN);
+    objDefProp(globalThis, 'isNaN', function isNaN(str) {
+      try {
+        return globalThis['&isNaN'](str);
+      } catch (e) {
+        console.warn(e);
+        try {
+          return globalThis['&isNaN'](String(str.description ?? str));
+        } catch (e) {
+          console.warn(e);
+          return false;
+        }
+      }
+    });
+  }
   if (globalThis.parseInt && !globalThis['&parseInt']) {
     objDefProp(globalThis, '&parseInt', globalThis.parseInt);
     objDefProp(globalThis, 'parseInt', function parseInt(str) {
