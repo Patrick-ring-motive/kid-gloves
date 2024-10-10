@@ -72,6 +72,26 @@ void (function KidGloves() {
     Object.setPrototypeOf(Promise, globalThis['&Promise']);
   }
 
+
+  if (globalThis.fetch && !globalThis['&new fetch']) {
+    objDefProp(globalThis, '&new fetch', fetch);
+    globalThis.Promise = function Promise() {
+      const promise =  globalThis['&new fetch'].call(this,...arguments);
+      if (new.target) {
+        objDefProp(this, 'toString', function toString() { return promise.toString(...arguments); });
+        objDefProp(this, 'valueOf', function valueOf() { return promise; });
+        objDefProp(this, 'toLocaleString', function toLocaleString() { return promise.toLocaleString(...arguments); });
+        objDefProp(this, Symbol.toPrimitive, function toPrimitive() { return promise; });
+        objDefProp(this, Symbol.toStringTag, function toStringTag() { return promise.toString(); });
+        Object.setPrototypeOf(this, globalThis['&Promise'].prototype);
+      } else {
+        console.warn('Using Promise without new is not recommended, use new Promise() instead');
+      }
+      return promise;
+    }
+  }
+  
+
   if (globalThis.Map && !globalThis['&Map']) {
     objDefProp(globalThis, '&Map', Map);
     globalThis.Map = function Map() {
