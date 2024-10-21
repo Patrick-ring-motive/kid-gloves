@@ -331,9 +331,9 @@ void (function KidGloves() {
   if (globalThis.Map?.prototype && !globalThis.Map?.prototype?.['&get']) {
     objDefProp(globalThis.Map.prototype, '&get', new Map().get);
     objDefProp(globalThis.Map.prototype, 'get', function get(key) {
-      if (!this.has(key)) {
+      /*if (!this.has(key)) {
         return console.warn(`No element found in Map for key: ${key}`);
-      }
+      }*/
       try {
         return this['&get'](key);
       } catch (e) {
