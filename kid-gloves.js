@@ -133,6 +133,7 @@ void (function KidGloves() {
       }
       return bigint;
     }
+    objDefProp(BigInt, 'prototype', globalThis['&BigInt'].prototype);
     Object.setPrototypeOf(BigInt, globalThis['&BigInt']);
 
   }
@@ -153,6 +154,7 @@ void (function KidGloves() {
       }
       return symbol;
     }
+    objDefProp(Symbol, 'prototype', globalThis['&Symbol'].prototype);
     Object.setPrototypeOf(Symbol, globalThis['&Symbol']);
 
   }
@@ -173,6 +175,7 @@ void (function KidGloves() {
       }
       return promise;
     }
+    objDefProp(Promise, 'prototype', globalThis['&Promise'].prototype);
     Object.setPrototypeOf(Promise, globalThis['&Promise']);
   }
 
@@ -274,6 +277,7 @@ void (function KidGloves() {
       }
       return map;
     }
+    objDefProp(Map, 'prototype', globalThis['&Map'].prototype);
     Object.setPrototypeOf(Map, globalThis['&Map']);
 
 
@@ -339,6 +343,7 @@ void (function KidGloves() {
       }
       return set;
     }
+    objDefProp(Set, 'prototype', globalThis['&Set'].prototype);
     Object.setPrototypeOf(Set, globalThis['&Set']);
   }
 
