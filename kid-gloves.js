@@ -137,7 +137,7 @@ void (function KidGloves() {
     },
     set(newValue) {
     },
-    enumerable: true,
+    enumerable: false,
     configurable: true,
   });
 
@@ -148,18 +148,18 @@ void (function KidGloves() {
     },
     set(newValue) {
     },
-    enumerable: true,
+    enumerable: false,
     configurable: true,
   });
 
   Object.defineProperty(globalThis, "from", {
     get() {
-      console.log('Attempting to call "from" in the wrong context');
+      console.warn('Attempting to call "from" in the wrong context');
       return _ => _;
     },
     set(newValue) {
     },
-    enumerable: true,
+    enumerable: false,
     configurable: true,
   });
   if (globalThis.BigInt && !globalThis['&BigInt']) {
