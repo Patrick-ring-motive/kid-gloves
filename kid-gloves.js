@@ -234,6 +234,7 @@ void (function KidGloves() {
       }
       return rex;
     }
+    objDefProp(RegExp, 'prototype', globalThis['&RegExp'].prototype);
     Object.setPrototypeOf(RegExp, globalThis['&RegExp']);
   }
 
