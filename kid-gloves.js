@@ -118,8 +118,8 @@ void (function KidGloves() {
     return target;
   }
   function assignProto(target, src) {
+    const proto = src?.prototype ?? Object(src);
     try {
-      const proto = src?.prototype ?? src;
       objDefProp(target, 'prototype', proto);
     } catch {
       try {
