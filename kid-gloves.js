@@ -53,6 +53,7 @@ void (function KidGloves() {
   globalThis.objSetProto = function() {
     return Object.setPrototypeOf(...arguments);
   };
+  
   globalThis.create = (proto) => Object.create(proto);
   function assignAll(target, src) {
     let excepts = ["prototype", "constructor", "__proto__"];
@@ -117,6 +118,38 @@ void (function KidGloves() {
     return target;
   }
 
+  Object.defineProperty(globalThis, "arguments", {
+       get() {
+           console.warn('Attempting to retrieve arguments in the wrong context');
+           return (function args(){return arguments})();
+       },
+       set(newValue) {
+       },
+       enumerable: true,
+       configurable: true,
+   });
+
+   Object.defineProperty(globalThis, "of", {
+       get() {
+           console.warn('Attempting to call "of" in the wrong context');
+           return _ => _;
+       },
+       set(newValue) {
+       },
+       enumerable: true,
+       configurable: true,
+   });
+
+   Object.defineProperty(globalThis, "from", {
+       get() {
+           console.log('Attempting to call "from" in the wrong context');
+           return _ => _;
+       },
+       set(newValue) {
+       },
+       enumerable: true,
+       configurable: true,
+   });
   if (globalThis.BigInt && !globalThis['&BigInt']) {
     objDefProp(globalThis, '&BigInt', BigInt);
     globalThis.BigInt = function BigInt(n) {
