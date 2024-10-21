@@ -53,7 +53,7 @@ void (function KidGloves() {
   globalThis.objSetProto = function() {
     return Object.setPrototypeOf(...arguments);
   };
-  
+
   globalThis.create = (proto) => Object.create(proto);
   function assignAll(target, src) {
     let excepts = ["prototype", "constructor", "__proto__"];
@@ -117,39 +117,51 @@ void (function KidGloves() {
     }
     return target;
   }
-
+  function assignProto(target, src) {
+    try {
+      const proto = src?.prototype ?? src;
+      objDefProp(target, 'prototype', proto);
+    } catch {
+      try {
+        target.prototype = proto;
+      } catch { }
+      if (target.prototype != proto) {
+        assignAll(target.prototype, proto);
+      }
+    }
+  }
   Object.defineProperty(globalThis, "arguments", {
-       get() {
-           console.warn('Attempting to retrieve arguments in the wrong context');
-           return (function args(){return arguments})();
-       },
-       set(newValue) {
-       },
-       enumerable: true,
-       configurable: true,
-   });
+    get() {
+      console.warn('Attempting to retrieve arguments in the wrong context');
+      return (function args() { return arguments })();
+    },
+    set(newValue) {
+    },
+    enumerable: true,
+    configurable: true,
+  });
 
-   Object.defineProperty(globalThis, "of", {
-       get() {
-           console.warn('Attempting to call "of" in the wrong context');
-           return _ => _;
-       },
-       set(newValue) {
-       },
-       enumerable: true,
-       configurable: true,
-   });
+  Object.defineProperty(globalThis, "of", {
+    get() {
+      console.warn('Attempting to call "of" in the wrong context');
+      return _ => _;
+    },
+    set(newValue) {
+    },
+    enumerable: true,
+    configurable: true,
+  });
 
-   Object.defineProperty(globalThis, "from", {
-       get() {
-           console.log('Attempting to call "from" in the wrong context');
-           return _ => _;
-       },
-       set(newValue) {
-       },
-       enumerable: true,
-       configurable: true,
-   });
+  Object.defineProperty(globalThis, "from", {
+    get() {
+      console.log('Attempting to call "from" in the wrong context');
+      return _ => _;
+    },
+    set(newValue) {
+    },
+    enumerable: true,
+    configurable: true,
+  });
   if (globalThis.BigInt && !globalThis['&BigInt']) {
     objDefProp(globalThis, '&BigInt', BigInt);
     globalThis.BigInt = function BigInt(n) {
@@ -166,7 +178,7 @@ void (function KidGloves() {
       }
       return bigint;
     }
-    objDefProp(BigInt, 'prototype', globalThis['&BigInt'].prototype);
+    assignProto(BigInt, globalThis['&BigInt']);
     Object.setPrototypeOf(BigInt, globalThis['&BigInt']);
 
   }
@@ -187,7 +199,7 @@ void (function KidGloves() {
       }
       return symbol;
     }
-    objDefProp(Symbol, 'prototype', globalThis['&Symbol'].prototype);
+    assignProto(Symbol, globalThis['&Symbol']);
     Object.setPrototypeOf(Symbol, globalThis['&Symbol']);
 
   }
@@ -208,7 +220,7 @@ void (function KidGloves() {
       }
       return promise;
     }
-    objDefProp(Promise, 'prototype', globalThis['&Promise'].prototype);
+    assignProto(Promise, globalThis['&Promise']);
     Object.setPrototypeOf(Promise, globalThis['&Promise']);
   }
 
@@ -270,7 +282,7 @@ void (function KidGloves() {
       }
       return rex;
     }
-    objDefProp(RegExp, 'prototype', globalThis['&RegExp'].prototype);
+    assignProto(RegExp, globalThis['&RegExp']);
     Object.setPrototypeOf(RegExp, globalThis['&RegExp']);
   }
 
@@ -310,7 +322,7 @@ void (function KidGloves() {
       }
       return map;
     }
-    objDefProp(Map, 'prototype', globalThis['&Map'].prototype);
+    assignProto(Map, globalThis['&Map']);
     Object.setPrototypeOf(Map, globalThis['&Map']);
 
 
@@ -376,7 +388,7 @@ void (function KidGloves() {
       }
       return set;
     }
-    objDefProp(Set, 'prototype', globalThis['&Set'].prototype);
+    assignProto(Set, globalThis['&Set']);
     Object.setPrototypeOf(Set, globalThis['&Set']);
   }
 
