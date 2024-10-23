@@ -132,10 +132,19 @@ void (function KidGloves() {
   }
   Object.defineProperty(globalThis, "arguments", {
     get() {
-      console.warn('Attempting to retrieve arguments in the wrong context');
+      try{
+      throw new Error('Attempting to retrieve arguments in the wrong context');
+      }catch(e){
+        console.warn(e);
+      }
       return (function args() { return arguments })();
     },
     set(newValue) {
+      try{
+        throw new Error('Attempting to set arguments in the wrong context');
+        }catch(e){
+          console.warn(e);
+        }
     },
     enumerable: false,
     configurable: true,
@@ -143,7 +152,11 @@ void (function KidGloves() {
 
   Object.defineProperty(globalThis, "of", {
     get() {
-      console.warn('Attempting to call "of" in the wrong context');
+      try{
+        throw new Error('Attempting to call "of" in the wrong context');
+        }catch(e){
+          console.warn(e);
+        }
       return _ => _;
     },
     set(newValue) {
@@ -154,7 +167,11 @@ void (function KidGloves() {
 
   Object.defineProperty(globalThis, "from", {
     get() {
-      console.warn('Attempting to call "from" in the wrong context');
+      try{
+        throw new Error('Attempting to call "from" in the wrong context');
+        }catch(e){
+          console.warn(e);
+        }
       return _ => _;
     },
     set(newValue) {
@@ -167,7 +184,11 @@ void (function KidGloves() {
     globalThis.BigInt = function BigInt(n) {
       const bigint = globalThis['&BigInt'](n);
       if (new.target) {
-        console.warn('Using BigInt with new is not recommended, use BigInt(n) instead');
+        try{
+          throw new Error('Using BigInt with new is not recommended, use BigInt(n) instead');
+          }catch(e){
+            console.warn(e,this,new.target,...arguments);
+          }
         objDefProp(this, 'toString', function toString() { return bigint.toString(...arguments); });
         objDefProp(this, 'valueOf', function valueOf() { return bigint; });
         objDefProp(this, 'toLocaleString', function toLocaleString() { return bigint.toLocaleString(...arguments); });
@@ -188,7 +209,11 @@ void (function KidGloves() {
     globalThis.Symbol = function Symbol(s) {
       const symbol = globalThis['&Symbol'](s);
       if (new.target) {
-        console.warn('Using Symbol with new is not recommended, use Symbol() instead');
+        try{
+          throw new Error('Using Symbol with new is not recommended, use Symbol() instead');
+          }catch(e){
+            console.warn(e,this,new.target,...arguments);
+          }
         objDefProp(this, 'toString', function toString() { return symbol.toString(...arguments); });
         objDefProp(this, 'valueOf', function valueOf() { return symbol; });
         objDefProp(this, 'toLocaleString', function toLocaleString() { return symbol.toLocaleString(...arguments); });
@@ -201,7 +226,6 @@ void (function KidGloves() {
     }
     assignProto(Symbol, globalThis['&Symbol']);
     Object.setPrototypeOf(Symbol, globalThis['&Symbol']);
-
   }
 
   if (globalThis.Promise && !globalThis['&Promise']) {
@@ -216,7 +240,11 @@ void (function KidGloves() {
         objDefProp(this, Symbol.toStringTag, function toStringTag() { return promise.toString(); });
         Object.setPrototypeOf(this, globalThis['&Promise'].prototype);
       } else {
-        console.warn('Using Promise without new is not recommended, use new Promise() instead');
+        try{
+          throw new Error('Using Promise without new is not recommended, use new Promise() instead');
+          }catch(e){
+            console.warn(e,this,new.target,...arguments);
+          }
       }
       return promise;
     }
