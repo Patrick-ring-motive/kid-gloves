@@ -132,19 +132,19 @@ void (function KidGloves() {
   }
   Object.defineProperty(globalThis, "arguments", {
     get() {
-      try{
-      throw new Error('Attempting to retrieve arguments in the wrong context');
-      }catch(e){
+      try {
+        throw new Error('Attempting to retrieve arguments in the wrong context');
+      } catch (e) {
         console.warn(e);
       }
       return (function args() { return arguments })();
     },
     set(newValue) {
-      try{
+      try {
         throw new Error('Attempting to set arguments in the wrong context');
-        }catch(e){
-          console.warn(e);
-        }
+      } catch (e) {
+        console.warn(e);
+      }
     },
     enumerable: false,
     configurable: true,
@@ -152,11 +152,11 @@ void (function KidGloves() {
 
   Object.defineProperty(globalThis, "of", {
     get() {
-      try{
+      try {
         throw new Error('Attempting to call "of" in the wrong context');
-        }catch(e){
-          console.warn(e);
-        }
+      } catch (e) {
+        console.warn(e);
+      }
       return _ => _;
     },
     set(newValue) {
@@ -167,11 +167,11 @@ void (function KidGloves() {
 
   Object.defineProperty(globalThis, "from", {
     get() {
-      try{
+      try {
         throw new Error('Attempting to call "from" in the wrong context');
-        }catch(e){
-          console.warn(e);
-        }
+      } catch (e) {
+        console.warn(e);
+      }
       return _ => _;
     },
     set(newValue) {
@@ -184,11 +184,11 @@ void (function KidGloves() {
     globalThis.BigInt = function BigInt(n) {
       const bigint = globalThis['&BigInt'](n);
       if (new.target) {
-        try{
+        try {
           throw new Error('Using BigInt with new is not recommended, use BigInt(n) instead');
-          }catch(e){
-            console.warn(e,this,new.target,...arguments);
-          }
+        } catch (e) {
+          console.warn(e, this, new.target, ...arguments);
+        }
         objDefProp(this, 'toString', function toString() { return bigint.toString(...arguments); });
         objDefProp(this, 'valueOf', function valueOf() { return bigint; });
         objDefProp(this, 'toLocaleString', function toLocaleString() { return bigint.toLocaleString(...arguments); });
@@ -209,11 +209,11 @@ void (function KidGloves() {
     globalThis.Symbol = function Symbol(s) {
       const symbol = globalThis['&Symbol'](s);
       if (new.target) {
-        try{
+        try {
           throw new Error('Using Symbol with new is not recommended, use Symbol() instead');
-          }catch(e){
-            console.warn(e,this,new.target,...arguments);
-          }
+        } catch (e) {
+          console.warn(e, this, new.target, ...arguments);
+        }
         objDefProp(this, 'toString', function toString() { return symbol.toString(...arguments); });
         objDefProp(this, 'valueOf', function valueOf() { return symbol; });
         objDefProp(this, 'toLocaleString', function toLocaleString() { return symbol.toLocaleString(...arguments); });
@@ -240,11 +240,11 @@ void (function KidGloves() {
         objDefProp(this, Symbol.toStringTag, function toStringTag() { return promise.toString(); });
         Object.setPrototypeOf(this, globalThis['&Promise'].prototype);
       } else {
-        try{
+        try {
           throw new Error('Using Promise without new is not recommended, use new Promise() instead');
-          }catch(e){
-            console.warn(e,this,new.target,...arguments);
-          }
+        } catch (e) {
+          console.warn(e, this, new.target, ...arguments);
+        }
       }
       return promise;
     }
@@ -719,7 +719,7 @@ void (function KidGloves() {
       }
     });
   }
-  if (document.write && !document['&write']) {
+  if (globalThis.document?.write && !globalThis.document?.['&write']) {
     objDefProp(document, '&write', document.write);
     objDefProp(document, 'write', function write(str) {
       try {
@@ -908,7 +908,7 @@ void (function KidGloves() {
       }
     });
   }
-  if (document.write && !document['&write']) {
+  if (globalThis?.document?.write && !globalThis?.document?.['&write']) {
     objDefProp(document, '&write', document.write);
     objDefProp(document, 'write', function write(str) {
       try {
@@ -950,5 +950,18 @@ void (function KidGloves() {
       }
     });
   }
+
+  if (globalThis.Object.getPrototypeOf && !globalThis.Object['&getPrototypeOf']) {
+    objDefProp(globalThis.Object, '&getPrototypeOf', globalThis.Object.getPrototypeOf);
+    objDefProp(globalThis.Object, 'getPrototypeOf', function getPrototypeOf(obj) {
+      try {
+        return globalThis.Object['&getPrototypeOf'](obj);
+      } catch (e) {
+        console.warn(e);
+        return globalThis.Object['&getPrototypeOf'](Object(obj));
+      }
+    });
+  }
+
 
 })();
