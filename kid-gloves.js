@@ -983,7 +983,7 @@ void (function KidGloves() {
 
 
   globalThis.namespaces ??= {};
-  globalThis.namespaces?.['kid-gloves'] ||= Object(true);
+  globalThis.namespaces['kid-gloves'] ||= Object(true);
 
 })();
 
