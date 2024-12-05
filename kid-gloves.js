@@ -1,4 +1,4 @@
-
+if(!globalThis.namespaces?.['kid-gloves']){
 void (function KidGloves() {
   const q = (varFn) => {
     try {
@@ -963,5 +963,9 @@ void (function KidGloves() {
     });
   }
 
+  globalThis.namespaces ??= {};
+  globalThis.namespaces.['kid-gloves'] ||= Object(true);
 
 })();
+
+}
