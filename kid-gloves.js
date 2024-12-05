@@ -436,7 +436,7 @@ void (function KidGloves() {
             return this['&querySelector'](...[...arguments].map(x => String(x?.description ?? x)));
           } catch (e) {
             console.warn(e);
-            return null;
+            return document.createElement('null');
           }
         }
       });
@@ -470,7 +470,7 @@ void (function KidGloves() {
             return this['&getElementById'](...[...arguments].map(x => String(x?.description ?? x)));
           } catch (e) {
             console.warn(e);
-            return null;
+            return document.createElement('null');
           }
         }
       });
