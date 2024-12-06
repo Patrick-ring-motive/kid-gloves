@@ -437,7 +437,7 @@ void (function KidGloves() {
             return this['&querySelector'](...[...arguments].map(x => String(x?.description ?? x)));
           } catch (e) {
             console.warn(e);
-            const Null = Object.setPrototypeOf(new Document().all,document.createElement('null'));
+            const Null = Object.setPrototypeOf(newQ(Document)?.all??Object(false),document.createElement('null'));
             objDefProp(Null, 'valueOf', ()=>null);
             objDefProp(Null, 'toString', ()=>'');
             objDefProp(Null, 'toLocaleString', ()=>'');
@@ -477,7 +477,7 @@ void (function KidGloves() {
             return this['&getElementById'](...[...arguments].map(x => String(x?.description ?? x)));
           } catch (e) {
             console.warn(e);
-            const Null = Object.setPrototypeOf(new Document().all,document.createElement('null'));
+            const Null = Object.setPrototypeOf(newQ(Document)?.all??Object(false),document.createElement('null'));
             objDefProp(Null, 'valueOf', ()=>null);
             objDefProp(Null, 'toString', ()=>'');
             objDefProp(Null, 'toLocaleString', ()=>'');
