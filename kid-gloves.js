@@ -405,6 +405,7 @@ void (function KidGloves() {
         set.add && objDefProp(this, 'add', function add() { return set.add(...arguments); });
         set.difference && objDefProp(this, 'difference', function difference() { return set.difference(...arguments); });
         set.intersection && objDefProp(this, 'intersection', function intersection() { return set.intersection(...arguments); });
+        
         set.isDisjointFrom && objDefProp(this, 'isDisjointFrom', function isDisjointFrom() { return set.isDisjointFrom(...arguments); });
         set.isSubsetOf && objDefProp(this, 'isSubsetOf', function isSubsetOf() { return set.isSubsetOf(...arguments); });
         set.isSupersetOf && objDefProp(this, 'isSupersetOf', function isSupersetOf() { return set.isSupersetOf(...arguments); });
@@ -436,7 +437,13 @@ void (function KidGloves() {
             return this['&querySelector'](...[...arguments].map(x => String(x?.description ?? x)));
           } catch (e) {
             console.warn(e);
-            return document.createElement('null');
+            const Null = Object.setPrototypeOf(new Document().all,document.createElement('null'));
+            objDefProp(Null, 'valueOf', ()=>null);
+            objDefProp(Null, 'toString', ()=>'');
+            objDefProp(Null, 'toLocaleString', ()=>'');
+            objDefProp(Null, Symbol.toPrimitive, ()=>null);
+            objDefProp(Null, Symbol.toStringTag, ()=>'');
+            return Null;
           }
         }
       });
@@ -470,7 +477,13 @@ void (function KidGloves() {
             return this['&getElementById'](...[...arguments].map(x => String(x?.description ?? x)));
           } catch (e) {
             console.warn(e);
-            return document.createElement('null');
+            const Null = Object.setPrototypeOf(new Document().all,document.createElement('null'));
+            objDefProp(Null, 'valueOf', ()=>null);
+            objDefProp(Null, 'toString', ()=>'');
+            objDefProp(Null, 'toLocaleString', ()=>'');
+            objDefProp(Null, Symbol.toPrimitive, ()=>null);
+            objDefProp(Null, Symbol.toStringTag, ()=>'');
+            return Null;
           }
         }
       });
