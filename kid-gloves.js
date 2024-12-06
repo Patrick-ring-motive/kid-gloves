@@ -589,11 +589,49 @@ void (function KidGloves() {
         }
       });
 
+      if (globalThis[nodeType]?.prototype?.createElement && !globalThis[nodeType]?.prototype?.['&createElement']) {
+        objDefProp(globalThis[nodeType].prototype, '&createElement', globalThis[nodeType].prototype.createElement);
+        objDefEnum(globalThis[nodeType].prototype, 'createElement', function createElement() {
+          try {
+            return this['&createElement'](...arguments);
+          } catch (e) {
+            console.warn(e,...arguments);
+            return this['&createElement'](e?.name ?? 'Error');
+          }
+        });
+      }
       objDefProp(globalThis[nodeType].prototype, 'getElementByName', function getElementByName(query) {
         console.warn('getElementByName is not supported. Did you mean getElementsByName?');
         return this.getElementsByName?.(query)?.[0] ?? null;
       });
+
+      
     }
+  }
+
+  if (globalThis[nodeType]?.prototype?.createElementNS && !globalThis[nodeType]?.prototype?.['&createElementNS']) {
+    objDefProp(globalThis[nodeType].prototype, '&createElementNS', globalThis[nodeType].prototype.createElementNS);
+    objDefEnum(globalThis[nodeType].prototype, 'createElementNS', function createElementNS() {
+      try {
+        return this['&createElementNS'](...arguments);
+      } catch (e) {
+        try{
+          console.warn(e,...arguments);
+          return this['&createElement'](...arguments);
+        }catch(e){
+          console.warn(e,...arguments);
+          return this['&createElement'](e?.name ?? 'Error');
+        }
+      }
+    });
+  }
+  objDefProp(globalThis[nodeType].prototype, 'getElementByName', function getElementByName(query) {
+    console.warn('getElementByName is not supported. Did you mean getElementsByName?');
+    return this.getElementsByName?.(query)?.[0] ?? null;
+  });
+
+
+  }
   }
   makeNodes('Document');
   makeNodes('Element');
@@ -1004,6 +1042,8 @@ void (function KidGloves() {
       return child ??document.createElement(String(child));
     });
   }
+
+  
 
   globalThis.namespaces ??= {};
   globalThis.namespaces['kid-gloves'] ||= Object(true);
