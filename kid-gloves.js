@@ -993,7 +993,17 @@ void (function KidGloves() {
     });
   }
 
-
+  if(globalThis.Node?.prototype?.appendChild && !globalThis.Node?.prototype?.['&appendChild']){
+    objDefProp(globalThis.Node.prototype,'&appendChild',globalThis.Node.prototype.appendChild);
+    objDefEnum(globalThis.Node.prototype,'appendChild',function appendChild(child){
+      try{
+          this['&appendChild'](child);
+      }catch(e){
+        console.warn(e,this,...arguments);
+      }
+      return child ??document.createElement(String(child));
+    });
+  }
 
   globalThis.namespaces ??= {};
   globalThis.namespaces['kid-gloves'] ||= Object(true);
