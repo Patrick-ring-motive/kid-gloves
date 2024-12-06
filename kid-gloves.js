@@ -518,7 +518,7 @@ void (function KidGloves() {
       });
       objDefProp(globalThis[nodeType].prototype, 'getElementByTagName', function getElementByTagName(query) {
         console.warn('getElementByTagName is not supported. Did you mean getElementsByTagName?');
-        return this.getElementsByTagName?.(query)?.[0] ?? null;
+        return this.getElementsByTagName?.(query)?.[0] ?? this.querySelector(query);
       });
 
 
@@ -543,7 +543,7 @@ void (function KidGloves() {
       });
       objDefProp(globalThis[nodeType].prototype, 'getElementByClassName', function getElementByClassName(query) {
         console.warn('getElementByClassName is not supported. Did you mean getElementsByClassName?');
-        return this.getElementsByClassName?.(query)?.[0] ?? null;
+        return this.getElementsByClassName?.(query)?.[0] ?? this.querySelector(`.${query}`);
       });
 
 
@@ -588,7 +588,7 @@ void (function KidGloves() {
           }
         }
       });
-
+    }
       if (globalThis[nodeType]?.prototype?.createElement && !globalThis[nodeType]?.prototype?.['&createElement']) {
         objDefProp(globalThis[nodeType].prototype, '&createElement', globalThis[nodeType].prototype.createElement);
         objDefEnum(globalThis[nodeType].prototype, 'createElement', function createElement() {
@@ -606,8 +606,8 @@ void (function KidGloves() {
       });
 
       
-    }
-  }
+    
+
 
   if (globalThis[nodeType]?.prototype?.createElementNS && !globalThis[nodeType]?.prototype?.['&createElementNS']) {
     objDefProp(globalThis[nodeType].prototype, '&createElementNS', globalThis[nodeType].prototype.createElementNS);
@@ -632,7 +632,7 @@ void (function KidGloves() {
 
 
   }
-  }
+  
   makeNodes('Document');
   makeNodes('Element');
   makeNodes('DocumentFragment');
