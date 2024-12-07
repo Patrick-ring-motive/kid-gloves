@@ -429,20 +429,20 @@ if (!globalThis.namespaces?.['kid-gloves']) {
       if (globalThis[nodeType]?.prototype?.querySelector && !globalThis[nodeType]?.prototype?.['&querySelector']) {
         objDefProp(globalThis[nodeType].prototype, '&querySelector', globalThis[nodeType].prototype.querySelector);
         objDefEnum(globalThis[nodeType].prototype, 'querySelector', function querySelector() {
+          const Null = Object.setPrototypeOf(newQ(Document)?.all ?? Object(false), document.createElement('null'));
+          objDefProp(Null, 'valueOf', () => null);
+          objDefProp(Null, 'toString', () => '');
+          objDefProp(Null, 'toLocaleString', () => '');
+          objDefProp(Null, Symbol.toPrimitive, () => null);
+          objDefProp(Null, Symbol.toStringTag, () => '');
           try {
-            return this['&querySelector'](...arguments);
+            return this['&querySelector'](...arguments) ?? Null;
           } catch (e) {
             console.warn(e);
             try {
-              return this['&querySelector'](...[...arguments].map(x => String(x?.description ?? x)));
+              return this['&querySelector'](...[...arguments].map(x => String(x?.description ?? x))) ?? Null;
             } catch (e) {
               console.warn(e);
-              const Null = Object.setPrototypeOf(newQ(Document)?.all ?? Object(false), document.createElement('null'));
-              objDefProp(Null, 'valueOf', () => null);
-              objDefProp(Null, 'toString', () => '');
-              objDefProp(Null, 'toLocaleString', () => '');
-              objDefProp(Null, Symbol.toPrimitive, () => null);
-              objDefProp(Null, Symbol.toStringTag, () => '');
               return Null;
             }
           }
@@ -469,20 +469,20 @@ if (!globalThis.namespaces?.['kid-gloves']) {
       if (globalThis[nodeType]?.prototype?.getElementById && !globalThis[nodeType]?.prototype?.['&getElementById']) {
         objDefProp(globalThis[nodeType].prototype, '&getElementById', globalThis[nodeType].prototype.getElementById);
         objDefEnum(globalThis[nodeType].prototype, 'getElementById', function getElementById() {
+          const Null = Object.setPrototypeOf(newQ(Document)?.all ?? Object(false), document.createElement('null'));
+          objDefProp(Null, 'valueOf', () => null);
+          objDefProp(Null, 'toString', () => '');
+          objDefProp(Null, 'toLocaleString', () => '');
+          objDefProp(Null, Symbol.toPrimitive, () => null);
+          objDefProp(Null, Symbol.toStringTag, () => '');
           try {
-            return this['&getElementById'](...arguments);
+            return this['&getElementById'](...arguments) ?? Null;
           } catch (e) {
             console.warn(e);
             try {
-              return this['&getElementById'](...[...arguments].map(x => String(x?.description ?? x)));
+              return this['&getElementById'](...[...arguments].map(x => String(x?.description ?? x))) ?? Null;
             } catch (e) {
               console.warn(e);
-              const Null = Object.setPrototypeOf(newQ(Document)?.all ?? Object(false), document.createElement('null'));
-              objDefProp(Null, 'valueOf', () => null);
-              objDefProp(Null, 'toString', () => '');
-              objDefProp(Null, 'toLocaleString', () => '');
-              objDefProp(Null, Symbol.toPrimitive, () => null);
-              objDefProp(Null, Symbol.toStringTag, () => '');
               return Null;
             }
           }
