@@ -429,12 +429,30 @@ if (!globalThis.namespaces?.['kid-gloves']) {
       if (globalThis[nodeType]?.prototype?.querySelector && !globalThis[nodeType]?.prototype?.['&querySelector']) {
         objDefProp(globalThis[nodeType].prototype, '&querySelector', globalThis[nodeType].prototype.querySelector);
         objDefEnum(globalThis[nodeType].prototype, 'querySelector', function querySelector() {
-          const Null = Object.setPrototypeOf(newQ(Document)?.all ?? Object(false), document.createElement('null'));
+          const nul = document.createElement('null');
+          const all = newQ(Document)?.all ?? Object(false)
+          Object.getOwnPropertyNames(nul).forEach(x => {
+            if (typeof nul[x] == 'function') objDefProp(all, x, function() {
+              return nul[x](...arguments);
+            });
+          });
+          Object.getOwnPropertyNames(Element.prototype).forEach(x => {
+            if (typeof nul[x] == 'function') objDefProp(all, x, function() {
+              return nul[x](...arguments);
+            });
+          });
+          Object.getOwnPropertyNames(Node.prototype).forEach(x => {
+            if (typeof nul[x] == 'function') objDefProp(all, x, function() {
+              return nul[x](...arguments);
+            });
+          });
+          const Null = Object.setPrototypeOf(all, nul);
           objDefProp(Null, 'valueOf', () => null);
           objDefProp(Null, 'toString', () => '');
           objDefProp(Null, 'toLocaleString', () => '');
           objDefProp(Null, Symbol.toPrimitive, () => null);
           objDefProp(Null, Symbol.toStringTag, () => '');
+          Object.getOwnPropertyNames()
           try {
             return this['&querySelector'](...arguments) ?? Null;
           } catch (e) {
@@ -469,7 +487,24 @@ if (!globalThis.namespaces?.['kid-gloves']) {
       if (globalThis[nodeType]?.prototype?.getElementById && !globalThis[nodeType]?.prototype?.['&getElementById']) {
         objDefProp(globalThis[nodeType].prototype, '&getElementById', globalThis[nodeType].prototype.getElementById);
         objDefEnum(globalThis[nodeType].prototype, 'getElementById', function getElementById() {
-          const Null = Object.setPrototypeOf(newQ(Document)?.all ?? Object(false), document.createElement('null'));
+          const nul = document.createElement('null');
+          const all = newQ(Document)?.all ?? Object(false)
+          Object.getOwnPropertyNames(nul).forEach(x => {
+            if (typeof nul[x] == 'function') objDefProp(all, x, function() {
+              return nul[x](...arguments);
+            });
+          });
+          Object.getOwnPropertyNames(Element.prototype).forEach(x => {
+            if (typeof nul[x] == 'function') objDefProp(all, x, function() {
+              return nul[x](...arguments);
+            });
+          });
+          Object.getOwnPropertyNames(Node.prototype).forEach(x => {
+            if (typeof nul[x] == 'function') objDefProp(all, x, function() {
+              return nul[x](...arguments);
+            });
+          });
+          const Null = Object.setPrototypeOf(all, nul);
           objDefProp(Null, 'valueOf', () => null);
           objDefProp(Null, 'toString', () => '');
           objDefProp(Null, 'toLocaleString', () => '');
