@@ -671,6 +671,9 @@ if (!globalThis.namespaces?.['kid-gloves']) {
     makeNodes('Document');
     makeNodes('Element');
     makeNodes('DocumentFragment');
+    objDefProp(globalThis.window??{}, '&querySelectorAll',function querySelectorAll(){
+      return document.querySelectorAll(...arguments);
+    });
 
     if (Object.freeze && !Object['&freeze']) {
       objDefProp(Object, '&freeze', Object.freeze);
