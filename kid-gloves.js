@@ -453,14 +453,14 @@ if (!globalThis.namespaces?.['kid-gloves']) {
           objDefProp(Null, Symbol.toPrimitive, () => null);
           objDefProp(Null, Symbol.toStringTag, () => '');
           try {
-            return this['&querySelector'](...arguments) ?? Null;
+            return this['&querySelector'](...arguments) //?? Null;
           } catch (e) {
             console.warn(e);
             try {
               return this['&querySelector'](...[...arguments].map(x => String(x?.description ?? x))) ?? Null;
             } catch (e) {
               console.warn(e);
-              return Null;
+              return //Null;
             }
           }
         });
@@ -510,14 +510,14 @@ if (!globalThis.namespaces?.['kid-gloves']) {
           objDefProp(Null, Symbol.toPrimitive, () => null);
           objDefProp(Null, Symbol.toStringTag, () => '');
           try {
-            return this['&getElementById'](...arguments) ?? Null;
+            return this['&getElementById'](...arguments) //?? Null;
           } catch (e) {
             console.warn(e);
             try {
               return this['&getElementById'](...[...arguments].map(x => String(x?.description ?? x))) ?? Null;
             } catch (e) {
               console.warn(e);
-              return Null;
+              return //Null;
             }
           }
         });
