@@ -473,7 +473,7 @@ if (!globalThis.namespaces?.['kid-gloves']) {
           try {
             return this['&querySelectorAll'](...arguments);
           } catch (e) {
-            console.warn(e);
+            console.warn(e,this,...arguments);
             try {
               return this['&querySelectorAll'](...[...arguments].map(x => String(x?.description ?? x)));
             } catch (e) {
