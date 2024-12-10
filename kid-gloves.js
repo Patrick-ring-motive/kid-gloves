@@ -452,7 +452,6 @@ if (!globalThis.namespaces?.['kid-gloves']) {
           objDefProp(Null, 'toLocaleString', () => '');
           objDefProp(Null, Symbol.toPrimitive, () => null);
           objDefProp(Null, Symbol.toStringTag, () => '');
-          Object.getOwnPropertyNames()
           try {
             return this['&querySelector'](...arguments) ?? Null;
           } catch (e) {
