@@ -126,100 +126,133 @@ if (!globalThis.namespaces?.['kid-gloves']) {
       while (source) {
         for (let x in source) {
           try {
-            if (excepts.includes(x)) {
+            if (excepts.includes(x)||enums.includes(x)) {
               continue;
             }
-            (()=>{
+            (() => {
               const $source = source;
-            if (typeof $source[x] == 'function'){
-            objDefEnum(target, x, function(){return $source[x](...arguments);});
-            }else{
-              Object.defineProperty(target, x, {
-                  get() {
-                      return $source[x];
-                  },
-                set(value) {
-                  try{
-                   $source[x] = value;
-                  }catch(e){
-                    console.warn(e,this,...arguments);
+              if (typeof $source[x] == 'function') {
+                objDefEnum(target, x, function() {
+                  try {
+                    return $source[x](...arguments);
+                  } catch (e) {
+                    console.warn(e, this, ...arguments);
                   }
-                },
+                });
+              } else {
+                Object.defineProperty(target, x, {
+                  get() {
+                    try {
+                      return $source[x];
+                    } catch (e) {
+                      console.warn(e, this, ...arguments);
+                    }
+                  },
+                  set(value) {
+                    try {
+                      $source[x] = value;
+                    } catch (e) {
+                      console.warn(e, this, ...arguments);
+                    }
+                  },
                   enumerable: true,
                   configurable: true,
-              });
-            }
+                });
+              }
             })();
             enums.push(x);
           } catch (e) {
             continue;
           }
         }
+        let props = [];
         for (let key of objectNames(source)) {
           try {
-            if (enums.includes(key) || excepts.includes(key)) {
+            if (enums.includes(key) || excepts.includes(key)||props.includes(key)) {
               continue;
             }
-           (()=>{
-             const $source = source;
-            if (typeof $source[key] == 'function'){
-              objDefProp(target, key, function(){return $source[key](...arguments);});
-              }else{
+            (() => {
+              const $source = source;
+              if (typeof $source[key] == 'function') {
+                objDefProp(target, key, function() {
+                  try {
+                    return $source[key](...arguments);
+                  } catch (e) {
+                    console.warn(e, this, ...arguments);
+                  }
+                });
+              } else {
                 Object.defineProperty(target, key, {
-                    get() {
-                        return $source[key];
-                    },
-                  set(value) {
-                    try{
-                     $source[key] = value;
-                    }catch(e){
-                      console.warn(e,this,...arguments);
+                  get() {
+                    try {
+                      return $source[key];
+                    } catch (e) {
+                      console.warn(e, this, ...arguments);
                     }
                   },
-                    enumerable: false,
-                    configurable: true,
-                });
-              }
-          })();
-          } catch {
-            continue;
-          }
-        }
-        for (let key of objectSymbols(source)) {
-          try {
-            if (enums.includes(key) || excepts.includes(key)) {
-              continue;
-            }
-            (()=>{
-              const $source = source;
-            if (typeof $source[key] == 'function'){
-            objDefProp(target, key, function(){return $source[key](...arguments);});
-            }else{
-              Object.defineProperty(target, key, {
-                  get() {
-                      return $source[key];
-                  },
                   set(value) {
-                    try{
-                     $source[key] = value;
-                    }catch(e){
-                      console.warn(e,this,...arguments);
+                    try {
+                      $source[key] = value;
+                    } catch (e) {
+                      console.warn(e, this, ...arguments);
                     }
                   },
                   enumerable: false,
                   configurable: true,
-              });
-            }
+                });
+              }
             })();
           } catch {
             continue;
           }
+          props.push(key);
+        }
+        for (let key of objectSymbols(source)) {
+          try {
+            if (enums.includes(key) || excepts.includes(key)||props.includes(key)) {
+              continue;
+            }
+            (() => {
+              const $source = source;
+              if (typeof $source[key] == 'function') {
+                objDefProp(target, key, function() {
+                  try {
+                    return $source[key](...arguments);
+                  } catch (e) {
+                    console.warn(e, this, ...arguments);
+                  }
+                });
+              } else {
+                Object.defineProperty(target, key, {
+                  get() {
+                    try {
+                      return $source[key];
+                    } catch (e) {
+                      console.warn(e, this, ...arguments);
+                    }
+                  },
+                  set(value) {
+                    try {
+                      $source[key] = value;
+                    } catch (e) {
+                      console.warn(e, this, ...arguments);
+                    }
+                  },
+                  enumerable: false,
+                  configurable: true,
+                });
+              }
+            })();
+          } catch {
+            continue;
+          }
+          props.push(key);
         }
         source = objGetProto(source);
       }
       return target;
     }
-    
+
     function assignProto(target, src) {
       const proto = src?.prototype ?? Object(src);
       try {
@@ -527,13 +560,13 @@ if (!globalThis.namespaces?.['kid-gloves']) {
     function emptyNodeList() {
       return document?.createDocumentFragment?.()?.querySelectorAll?.('*') ?? [];
     }
-    function Null(){
+    function Null() {
       const nul = document.createElement('null');
       nul.style.display = 'none';
       nul.style.visibility = 'hidden';
       nul.style.opactiy = 0;
       const all = newQ(Document)?.all ?? Object(false);
-      return shamAll(all,nul);
+      return shamAll(all, nul);
     }
 
     function makeNodes(nodeType) {
@@ -560,7 +593,7 @@ if (!globalThis.namespaces?.['kid-gloves']) {
           try {
             return this['&querySelectorAll'](...arguments);
           } catch (e) {
-            console.warn(e,this,...arguments);
+            console.warn(e, this, ...arguments);
             try {
               return this['&querySelectorAll'](...[...arguments].map(x => str(x)));
             } catch (e) {
@@ -617,7 +650,7 @@ if (!globalThis.namespaces?.['kid-gloves']) {
         });
         objDefProp(globalThis[nodeType].prototype, 'getElementByTagName', function getElementByTagName(query) {
           console.warn('getElementByTagName is not supported. Did you mean getElementsByTagName?');
-          return this.getElementsByTagName?.(query)?.[0] ?? this.querySelector(query)??Null();
+          return this.getElementsByTagName?.(query)?.[0] ?? this.querySelector(query) ?? Null();
         });
 
 
@@ -735,7 +768,7 @@ if (!globalThis.namespaces?.['kid-gloves']) {
     makeNodes('Document');
     makeNodes('Element');
     makeNodes('DocumentFragment');
-    objDefProp(globalThis.window??{}, '&querySelectorAll',function querySelectorAll(){
+    objDefProp(globalThis.window ?? {}, '&querySelectorAll', function querySelectorAll() {
       return document.querySelectorAll(...arguments);
     });
 
@@ -995,8 +1028,8 @@ if (!globalThis.namespaces?.['kid-gloves']) {
         }
       });
     }
-(()=>{
-       const $isNaN = globalThis.isNaN;
+    (() => {
+      const $isNaN = globalThis.isNaN;
       objDefProp(globalThis, 'isNaN', function isNaN(s) {
         try {
           return $isNaN(s);
@@ -1010,8 +1043,8 @@ if (!globalThis.namespaces?.['kid-gloves']) {
           }
         }
       });
-})();
-(()=>{
+    })();
+    (() => {
       const $parseInt = globalThis.parseInt;
       objDefProp(globalThis, 'parseInt', function parseInt(s) {
         try {
@@ -1026,8 +1059,8 @@ if (!globalThis.namespaces?.['kid-gloves']) {
           }
         }
       });
-  })();
-(()=>{
+    })();
+    (() => {
       const $parseFloat = Symbol('parseFloat');
       objDefProp(Number, $parseFloat, Number.parseFloat);
       objDefProp(Number, 'parseFloat', function parseFloat(s) {
@@ -1043,7 +1076,7 @@ if (!globalThis.namespaces?.['kid-gloves']) {
           }
         }
       });
-})();
+    })();
     if (Number.parseInt && !Number['&parseInt']) {
       objDefProp(Number, '&parseInt', Number.parseInt);
       objDefProp(Number, 'parseInt', function parseInt(str) {
