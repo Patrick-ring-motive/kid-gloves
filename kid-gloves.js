@@ -119,7 +119,7 @@ if (!globalThis.namespaces?.['kid-gloves']) {
     }
 
     function shamAll(target, src) {
-      if((target ?? src)==undefined)return target;
+      //if((target ?? src)==undefined)return target;
       let excepts = ["prototype", "constructor", "__proto__"];
       let enums = [];
       let source = src;
@@ -135,11 +135,11 @@ if (!globalThis.namespaces?.['kid-gloves']) {
             }else{
               Object.defineProperty(target, x, {
                   get() {
-                      return source[x];
+                      return source?.[x];
                   },
                 set(value) {
                   try{
-                   source[key] = value;
+                   (source??{})[x] = value;
                   }catch(e){
                     console.warn(e,this,...arguments);
                   }
@@ -164,11 +164,11 @@ if (!globalThis.namespaces?.['kid-gloves']) {
               }else{
                 Object.defineProperty(target, key, {
                     get() {
-                        return source[key];
+                        return source?.[key];
                     },
                   set(value) {
                     try{
-                     source[key] = value;
+                     (source??{})[key] = value;
                     }catch(e){
                       console.warn(e,this,...arguments);
                     }
@@ -192,11 +192,11 @@ if (!globalThis.namespaces?.['kid-gloves']) {
             }else{
               Object.defineProperty(target, key, {
                   get() {
-                      return source[key];
+                      return source?.[key];
                   },
                   set(value) {
                     try{
-                     source[key] = value;
+                     (source??{})[key] = value;
                     }catch(e){
                       console.warn(e,this,...arguments);
                     }
@@ -1113,7 +1113,7 @@ if (!globalThis.namespaces?.['kid-gloves']) {
       objDefProp(globalThis.Node.prototype, '&removeChild', globalThis.Node.prototype.removeChild);
       objDefEnum(globalThis.Node.prototype, 'removeChild', function removeChild(child) {
         try {
-          this['&removeChild'](child);
+          this['&removeChild'](...arguments);
         } catch (e) {
           console.warn(e, this, ...arguments);
           try {
@@ -1137,7 +1137,138 @@ if (!globalThis.namespaces?.['kid-gloves']) {
         return child ?? document.createElement(String(child));
       });
     }
-
+    if (globalThis.Node?.prototype?.replaceChild && !globalThis.Node?.prototype?.['&replaceChild']) {
+      objDefProp(globalThis.Node.prototype, '&replaceChild', globalThis.Node.prototype.replaceChild);
+      objDefEnum(globalThis.Node.prototype, 'replaceChild', function replaceChild(child) {
+        try {
+          this['&replaceChild'](...arguments);
+        } catch (e) {
+          console.warn(e, this, ...arguments);
+        }
+        return child ?? document.createElement(String(child));
+      });
+    }
+    if (globalThis.Node?.prototype?.insertBefore && !globalThis.Node?.prototype?.['&insertBefore']) {
+      objDefProp(globalThis.Node.prototype, '&insertBefore', globalThis.Node.prototype.insertBefore);
+      objDefEnum(globalThis.Node.prototype, 'insertBefore', function insertBefore(child) {
+        try {
+          this['&insertBefore'](...arguments);
+        } catch (e) {
+          console.warn(e, this, ...arguments);
+        }
+        return child ?? document.createElement(String(child));
+      });
+    }
+    if (globalThis.Element?.prototype?.append && !globalThis.Element?.prototype?.['&append']) {
+      objDefProp(globalThis.Element.prototype, '&append', globalThis.Element.prototype.append);
+      objDefEnum(globalThis.Element.prototype, 'append', function append(child) {
+        try {
+          this['&append'](...arguments);
+        } catch (e) {
+          console.warn(e, this, ...arguments);
+        }
+        return child ?? document.createElement(String(child));
+      });
+    }
+    if (globalThis.Element?.prototype?.before && !globalThis.Element?.prototype?.['&before']) {
+      objDefProp(globalThis.Element.prototype, '&before', globalThis.Element.prototype.before);
+      objDefEnum(globalThis.Element.prototype, 'before', function before(child) {
+        try {
+          this['&before'](...arguments);
+        } catch (e) {
+          console.warn(e, this, ...arguments);
+        }
+        return child ?? document.createElement(String(child));
+      });
+    }
+    if (globalThis.Element?.prototype?.after && !globalThis.Element?.prototype?.['&after']) {
+      objDefProp(globalThis.Element.prototype, '&after', globalThis.Element.prototype.after);
+      objDefEnum(globalThis.Element.prototype, 'after', function after(child) {
+        try {
+          this['&after'](...arguments);
+        } catch (e) {
+          console.warn(e, this, ...arguments);
+        }
+        return child ?? document.createElement(String(child));
+      });
+    }
+    if (globalThis.Element?.prototype?.prepend && !globalThis.Element?.prototype?.['&prepend']) {
+      objDefProp(globalThis.Element.prototype, '&prepend', globalThis.Element.prototype.prepend);
+      objDefEnum(globalThis.Element.prototype, 'prepend', function prepend(child) {
+        try {
+          this['&prepend'](...arguments);
+        } catch (e) {
+          console.warn(e, this, ...arguments);
+        }
+        return child ?? document.createElement(String(child));
+      });
+    }
+    if (globalThis.Element?.prototype?.insertAdjacentElement && !globalThis.Element?.prototype?.['&insertAdjacentElement']) {
+      objDefProp(globalThis.Element.prototype, '&insertAdjacentElement', globalThis.Element.prototype.insertAdjacentElement);
+      objDefEnum(globalThis.Element.prototype, 'insertAdjacentElement', function insertAdjacentElement(child) {
+        try {
+          this['&insertAdjacentElement'](...arguments);
+        } catch (e) {
+          console.warn(e, this, ...arguments);
+        }
+        return child ?? document.createElement(String(child));
+      });
+    }
+    if (globalThis.Element?.prototype?.insertAdjacentHTML && !globalThis.Element?.prototype?.['&insertAdjacentHTML']) {
+      objDefProp(globalThis.Element.prototype, '&insertAdjacentHTML', globalThis.Element.prototype.insertAdjacentHTML);
+      objDefEnum(globalThis.Element.prototype, 'insertAdjacentHTML', function insertAdjacentHTML(child) {
+        try {
+          this['&insertAdjacentHTML'](...arguments);
+        } catch (e) {
+          console.warn(e, this, ...arguments);
+        }
+        return child ?? document.createElement(String(child));
+      });
+    }
+    if (globalThis.Element?.prototype?.insertAdjacentText && !globalThis.Element?.prototype?.['&insertAdjacentText']) {
+      objDefProp(globalThis.Element.prototype, '&insertAdjacentText', globalThis.Element.prototype.insertAdjacentText);
+      objDefEnum(globalThis.Element.prototype, 'insertAdjacentText', function insertAdjacentText(child) {
+        try {
+          this['&insertAdjacentText'](...arguments);
+        } catch (e) {
+          console.warn(e, this, ...arguments);
+        }
+        return child ?? document.createElement(String(child));
+      });
+    }
+    if (globalThis.Element?.prototype?.remove && !globalThis.Element?.prototype?.['&remove']) {
+      objDefProp(globalThis.Element.prototype, '&remove', globalThis.Element.prototype.remove);
+      objDefEnum(globalThis.Element.prototype, 'remove', function remove(child) {
+        try {
+          this['&remove'](...arguments);
+        } catch (e) {
+          console.warn(e, this, ...arguments);
+        }
+        return child ?? document.createElement(String(child));
+      });
+    }
+    if (globalThis.Element?.prototype?.replaceChildren && !globalThis.Element?.prototype?.['&replaceChildren']) {
+      objDefProp(globalThis.Element.prototype, '&replaceChildren', globalThis.Element.prototype.replaceChildren);
+      objDefEnum(globalThis.Element.prototype, 'replaceChildren', function replaceChildren(child) {
+        try {
+          this['&replaceChildren'](...arguments);
+        } catch (e) {
+          console.warn(e, this, ...arguments);
+        }
+        return child ?? document.createElement(String(child));
+      });
+    }
+    if (globalThis.Element?.prototype?.replaceWith && !globalThis.Element?.prototype?.['&replaceWith']) {
+      objDefProp(globalThis.Element.prototype, '&replaceWith', globalThis.Element.prototype.replaceWith);
+      objDefEnum(globalThis.Element.prototype, 'replaceWith', function replaceWith(child) {
+        try {
+          this['&replaceWith'](...arguments);
+        } catch (e) {
+          console.warn(e, this, ...arguments);
+        }
+        return child ?? document.createElement(String(child));
+      });
+    }
 
 
     globalThis.namespaces ??= {};
