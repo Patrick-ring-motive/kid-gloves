@@ -12,11 +12,12 @@ void async function() {
   await sleep(1000);
 
   try {
-    let x = new Set();
-    x.add(document.getElementsByTagName('head'));
-    document.querySelector(Symbol('div')).innerText = document.getElementsByTagName('head');
+    document.querySelector('div').innerText = !document.querySelector('poop');
+    let c=document.querySelector('poop');
+    c.innerText='h';
+    document.querySelector('div').appendChild(c);
   } catch (e) {
-    document.querySelector('div').innerText = e.message
+    document.querySelector('div').innerText = e.message;
   }
 
 }();

@@ -15,7 +15,7 @@ if (!globalThis.namespaces?.['kid-gloves']) {
       ?? q(() => global) // fallback for older nodejs
       ?? q(() => window) // fallback for older browsers
       ?? this ?? {}; // fallbacks for edge cases.
-
+    const str = x => String(x?.description ?? x?.source ?? x);
     for (let x of ['globalThis', 'self', 'global']) {
       globalObject[x] = globalObject;
     }
@@ -117,6 +117,103 @@ if (!globalThis.namespaces?.['kid-gloves']) {
       }
       return target;
     }
+
+    function shamAll(target, src) {
+      if((target ?? src)==undefined)return target;
+      let excepts = ["prototype", "constructor", "__proto__"];
+      let enums = [];
+      let source = src;
+      while (source) {
+        for (let x in source) {
+          try {
+            if (excepts.includes(x)) {
+              continue;
+            }
+            if (typeof source[x] == 'function'){
+            
+            objDefEnum(target, x, function(){return source[x](...arguments);});
+            }else{
+              Object.defineProperty(target, x, {
+                  get() {
+                      return source[x];
+                  },
+                set(value) {
+                  try{
+                   source[key] = value;
+                  }catch(e){
+                    console.warn(e,this,...arguments);
+                  }
+                },
+                  enumerable: true,
+                  configurable: true,
+              });
+            }
+            enums.push(x);
+          } catch (e) {
+            continue;
+          }
+        }
+        for (let key of objectNames(source)) {
+          try {
+            if (enums.includes(key) || excepts.includes(key)) {
+              continue;
+            }
+            if (typeof source[key] == 'function'){
+
+              objDefProp(target, key, function(){return source[key](...arguments);});
+              }else{
+                Object.defineProperty(target, key, {
+                    get() {
+                        return source[key];
+                    },
+                  set(value) {
+                    try{
+                     source[key] = value;
+                    }catch(e){
+                      console.warn(e,this,...arguments);
+                    }
+                  },
+                    enumerable: false,
+                    configurable: true,
+                });
+              }
+          } catch {
+            continue;
+          }
+        }
+        for (let key of objectSymbols(source)) {
+          try {
+            if (enums.includes(key) || excepts.includes(key)) {
+              continue;
+            }
+            if (typeof source[key] == 'function'){
+
+            objDefProp(target, key, function(){return source[key](...arguments);});
+            }else{
+              Object.defineProperty(target, key, {
+                  get() {
+                      return source[key];
+                  },
+                  set(value) {
+                    try{
+                     source[key] = value;
+                    }catch(e){
+                      console.warn(e,this,...arguments);
+                    }
+                  },
+                  enumerable: false,
+                  configurable: true,
+              });
+            }
+          } catch {
+            continue;
+          }
+        }
+        source = objGetProto(source);
+      }
+      return target;
+    }
+    
     function assignProto(target, src) {
       const proto = src?.prototype ?? Object(src);
       try {
@@ -424,43 +521,29 @@ if (!globalThis.namespaces?.['kid-gloves']) {
     function emptyNodeList() {
       return document?.createDocumentFragment?.()?.querySelectorAll?.('*') ?? [];
     }
+    function Null(){
+      const nul = document.createElement('null');
+      nul.style.display = 'none';
+      nul.style.visibility = 'hidden';
+      nul.style.opactiy = 0;
+      const all = newQ(Document)?.all ?? Object(false);
+      shamAll(all,nul);
+      return nul;
+    }
 
     function makeNodes(nodeType) {
       if (globalThis[nodeType]?.prototype?.querySelector && !globalThis[nodeType]?.prototype?.['&querySelector']) {
         objDefProp(globalThis[nodeType].prototype, '&querySelector', globalThis[nodeType].prototype.querySelector);
         objDefEnum(globalThis[nodeType].prototype, 'querySelector', function querySelector() {
-          const nul = document.createElement('null');
-          const all = newQ(Document)?.all ?? Object(false)
-          Object.getOwnPropertyNames(nul).forEach(x => {
-            if (typeof nul[x] == 'function') objDefProp(all, x, function() {
-              return nul[x](...arguments);
-            });
-          });
-          Object.getOwnPropertyNames(Element.prototype).forEach(x => {
-            if (typeof nul[x] == 'function') objDefProp(all, x, function() {
-              return nul[x](...arguments);
-            });
-          });
-          Object.getOwnPropertyNames(Node.prototype).forEach(x => {
-            if (typeof nul[x] == 'function') objDefProp(all, x, function() {
-              return nul[x](...arguments);
-            });
-          });
-          const Null = Object.setPrototypeOf(all, nul);
-          objDefProp(Null, 'valueOf', () => null);
-          objDefProp(Null, 'toString', () => '');
-          objDefProp(Null, 'toLocaleString', () => '');
-          objDefProp(Null, Symbol.toPrimitive, () => null);
-          objDefProp(Null, Symbol.toStringTag, () => '');
           try {
-            return this['&querySelector'](...arguments) //?? Null;
+            return this['&querySelector'](...arguments) ?? Null();
           } catch (e) {
             console.warn(e);
             try {
-              return this['&querySelector'](...[...arguments].map(x => String(x?.description ?? x))) ?? Null;
+              return this['&querySelector'](...[...arguments].map(x => str(x))) ?? Null();
             } catch (e) {
               console.warn(e);
-              return //Null;
+              return Null();
             }
           }
         });
@@ -474,7 +557,7 @@ if (!globalThis.namespaces?.['kid-gloves']) {
           } catch (e) {
             console.warn(e,this,...arguments);
             try {
-              return this['&querySelectorAll'](...[...arguments].map(x => String(x?.description ?? x)));
+              return this['&querySelectorAll'](...[...arguments].map(x => str(x)));
             } catch (e) {
               console.warn(e);
               return emptyNodeList();
@@ -486,48 +569,25 @@ if (!globalThis.namespaces?.['kid-gloves']) {
       if (globalThis[nodeType]?.prototype?.getElementById && !globalThis[nodeType]?.prototype?.['&getElementById']) {
         objDefProp(globalThis[nodeType].prototype, '&getElementById', globalThis[nodeType].prototype.getElementById);
         objDefEnum(globalThis[nodeType].prototype, 'getElementById', function getElementById() {
-          const nul = document.createElement('null');
-          const all = newQ(Document)?.all ?? Object(false)
-          Object.getOwnPropertyNames(nul).forEach(x => {
-            if (typeof nul[x] == 'function') objDefProp(all, x, function() {
-              return nul[x](...arguments);
-            });
-          });
-          Object.getOwnPropertyNames(Element.prototype).forEach(x => {
-            if (typeof nul[x] == 'function') objDefProp(all, x, function() {
-              return nul[x](...arguments);
-            });
-          });
-          Object.getOwnPropertyNames(Node.prototype).forEach(x => {
-            if (typeof nul[x] == 'function') objDefProp(all, x, function() {
-              return nul[x](...arguments);
-            });
-          });
-          const Null = Object.setPrototypeOf(all, nul);
-          objDefProp(Null, 'valueOf', () => null);
-          objDefProp(Null, 'toString', () => '');
-          objDefProp(Null, 'toLocaleString', () => '');
-          objDefProp(Null, Symbol.toPrimitive, () => null);
-          objDefProp(Null, Symbol.toStringTag, () => '');
           try {
-            return this['&getElementById'](...arguments) //?? Null;
+            return this['&getElementById'](...arguments) ?? Null();
           } catch (e) {
             console.warn(e);
             try {
-              return this['&getElementById'](...[...arguments].map(x => String(x?.description ?? x))) ?? Null;
+              return this['&getElementById'](...[...arguments].map(x => str(x))) ?? Null();
             } catch (e) {
               console.warn(e);
-              return //Null;
+              return Null();
             }
           }
         });
       }
 
       if (globalThis[nodeType]?.prototype?.getElementById && !globalThis[nodeType]?.prototype?.getElementsById) {
-        objDefProp(globalThis[nodeType].prototype, 'getElementsById', function getElementById(query) {
+        objDefProp(globalThis[nodeType].prototype, 'getElementsById', function getElementsById(query) {
           console.warn('getElementsById is not supported. Did you mean getElementById?');
           try {
-            return this?.querySelectorAll?.(`[id="${String(query.description ?? query)}"]`);
+            return this?.querySelectorAll?.(`[id="${str(query)}"]`);
           } catch (e) {
             console.warn(e);
             return emptyNodeList();
@@ -552,7 +612,7 @@ if (!globalThis.namespaces?.['kid-gloves']) {
         });
         objDefProp(globalThis[nodeType].prototype, 'getElementByTagName', function getElementByTagName(query) {
           console.warn('getElementByTagName is not supported. Did you mean getElementsByTagName?');
-          return this.getElementsByTagName?.(query)?.[0] ?? this.querySelector(query);
+          return this.getElementsByTagName?.(query)?.[0] ?? this.querySelector(query)??Null();
         });
 
 
@@ -577,7 +637,7 @@ if (!globalThis.namespaces?.['kid-gloves']) {
         });
         objDefProp(globalThis[nodeType].prototype, 'getElementByClassName', function getElementByClassName(query) {
           console.warn('getElementByClassName is not supported. Did you mean getElementsByClassName?');
-          return this.getElementsByClassName?.(query)?.[0] ?? this.querySelector(`.${query}`);
+          return this.getElementsByClassName?.(query)?.[0] ?? this.querySelector(`.${query}`) ?? Null();
         });
 
 
@@ -593,17 +653,17 @@ if (!globalThis.namespaces?.['kid-gloves']) {
           } catch (e) {
             console.warn(e);
             try {
-              return this['&getElementsByTagNameNS'](...[...arguments].map(x => String(x?.description ?? x)));
+              return this['&getElementsByTagNameNS'](...[...arguments].map(x => str(x)));
             } catch (e) {
               console.warn(e);
-              return this['&getElementsByTagNameNS']?.('<>')[0] ?? null;
+              return this['&getElementsByTagNameNS']?.('<>')[0] ?? [];
             }
           }
         });
 
         objDefProp(globalThis[nodeType].prototype, 'getElementByTagNameNS', function getElementByTagNameNS(query) {
           console.warn('getElementByTagNameNS is not supported. Did you mean getElementsByTagNameNS?');
-          return this.getElementsByTagNameNS?.(query)?.[0] ?? null;
+          return this.getElementsByTagNameNS?.(query)?.[0] ?? Null();
         });
       }
 
@@ -615,7 +675,7 @@ if (!globalThis.namespaces?.['kid-gloves']) {
           } catch (e) {
             console.warn(e);
             try {
-              return this['&getElementsByName'](...[...arguments].map(x => String(x?.description ?? x)));
+              return this['&getElementsByName'](...[...arguments].map(x => str(x)));
             } catch (e) {
               console.warn(e);
               return this['&getElementsByTagName']?.('<>') ?? [];
@@ -661,7 +721,7 @@ if (!globalThis.namespaces?.['kid-gloves']) {
       }
       objDefProp(globalThis[nodeType].prototype, 'getElementByName', function getElementByName(query) {
         console.warn('getElementByName is not supported. Did you mean getElementsByName?');
-        return this.getElementsByName?.(query)?.[0] ?? null;
+        return this.getElementsByName?.(query)?.[0] ?? Null();
       });
 
 
@@ -930,56 +990,55 @@ if (!globalThis.namespaces?.['kid-gloves']) {
         }
       });
     }
-    if (globalThis.isNaN && !globalThis['&isNaN']) {
-      objDefProp(globalThis, '&isNaN', globalThis.isNaN);
-      objDefProp(globalThis, 'isNaN', function isNaN(str) {
+(()=>{
+       const $isNaN = globalThis.isNaN;
+      objDefProp(globalThis, 'isNaN', function isNaN(s) {
         try {
-          return globalThis['&isNaN'](str);
+          return $isNaN(s);
         } catch (e) {
           console.warn(e);
           try {
-            return globalThis['&isNaN'](String(str.description ?? str));
+            return $isNaN(str(s));
           } catch (e) {
             console.warn(e);
             return false;
           }
         }
       });
-    }
-    if (globalThis.parseInt && !globalThis['&parseInt']) {
-      objDefProp(globalThis, '&parseInt', globalThis.parseInt);
-      objDefProp(globalThis, 'parseInt', function parseInt(str) {
+})();
+(()=>{
+      const $parseInt = globalThis.parseInt;
+      objDefProp(globalThis, 'parseInt', function parseInt(s) {
         try {
-          return globalThis['&parseInt'](str);
+          return $parseInt(s);
         } catch (e) {
           console.warn(e);
           try {
-            return globalThis['&parseInt'](String(str.description ?? str));
+            return $parseInt(str(s));
           } catch (e) {
             console.warn(e);
             return NaN;
           }
         }
       });
-    }
-
-    if (Number.parseFloat && !Number['&parseFloat']) {
-      objDefProp(Number, '&parseFloat', Number.parseFloat);
-      objDefProp(Number, 'parseFloat', function parseFloat(str) {
+  })();
+(()=>{
+      const $parseFloat = Symbol('parseFloat');
+      objDefProp(Number, $parseFloat, Number.parseFloat);
+      objDefProp(Number, 'parseFloat', function parseFloat(s) {
         try {
-          return Number['&parseFloat'](str);
+          return Number[$parseFloat](s);
         } catch (e) {
           console.warn(e);
           try {
-            return Number['&parseFloat'](String(str.description ?? str));
+            return Number[$parseFloat](str(s));
           } catch (e) {
             console.warn(e);
             return NaN;
           }
         }
       });
-    }
-
+})();
     if (Number.parseInt && !Number['&parseInt']) {
       objDefProp(Number, '&parseInt', Number.parseInt);
       objDefProp(Number, 'parseInt', function parseInt(str) {
