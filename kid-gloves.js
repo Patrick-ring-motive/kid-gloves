@@ -126,7 +126,7 @@ if (!globalThis.namespaces?.['kid-gloves']) {
       while (source) {
         for (let x in source) {
           try {
-            if (excepts.includes(x)||enums.includes(x)) {
+            if (excepts.includes(x) || enums.includes(x)) {
               continue;
             }
             (() => {
@@ -168,7 +168,7 @@ if (!globalThis.namespaces?.['kid-gloves']) {
         let props = [];
         for (let key of objectNames(source)) {
           try {
-            if (enums.includes(key) || excepts.includes(key)||props.includes(key)) {
+            if (enums.includes(key) || excepts.includes(key) || props.includes(key)) {
               continue;
             }
             (() => {
@@ -209,7 +209,7 @@ if (!globalThis.namespaces?.['kid-gloves']) {
         }
         for (let key of objectSymbols(source)) {
           try {
-            if (enums.includes(key) || excepts.includes(key)||props.includes(key)) {
+            if (enums.includes(key) || excepts.includes(key) || props.includes(key)) {
               continue;
             }
             (() => {
@@ -315,10 +315,12 @@ if (!globalThis.namespaces?.['kid-gloves']) {
       enumerable: false,
       configurable: true,
     });
-    if (globalThis.BigInt && !globalThis['&BigInt']) {
-      objDefProp(globalThis, '&BigInt', BigInt);
-      globalThis.BigInt = function BigInt(n) {
-        const bigint = globalThis['&BigInt'](n);
+
+    (() => {
+      const $BigInt = Symbol('BigInt');
+      objDefProp(globalThis, $BigInt, globalThis.BigInt);
+      globalThis.BigInt &&= function BigInt(n) {
+        const bigint = globalThis[$BigInt](n);
         if (new.target) {
           try {
             throw new Error('Using BigInt with new is not recommended, use BigInt(n) instead');
@@ -331,19 +333,20 @@ if (!globalThis.namespaces?.['kid-gloves']) {
           objDefProp(this, Symbol.toPrimitive, function toPrimitive() { return bigint; });
           objDefProp(this, Symbol.toStringTag, function toStringTag() { return bigint.toString(); });
 
-          Object.setPrototypeOf(this, globalThis['&BigInt'].prototype);
+          Object.setPrototypeOf(this, globalThis[$BigInt].prototype);
         }
         return bigint;
       }
-      assignProto(BigInt, globalThis['&BigInt']);
-      Object.setPrototypeOf(BigInt, globalThis['&BigInt']);
+      assignProto(globalThis.BigInt, globalThis[$BigInt]);
+      Object.setPrototypeOf(globalThis.BigInt, globalThis[$BigInt]);
+    })();
 
-    }
 
-    if (globalThis.Symbol && !globalThis['&Symbol']) {
-      objDefProp(globalThis, '&Symbol', Symbol);
+    (() => {
+      const $Symbol = Symbol('Symbol');
+      objDefProp(globalThis, $Symbol, globalThis.Symbol);
       globalThis.Symbol = function Symbol(s) {
-        const symbol = globalThis['&Symbol'](s);
+        const symbol = globalThis[$Symbol](s);
         if (new.target) {
           try {
             throw new Error('Using Symbol with new is not recommended, use Symbol() instead');
@@ -356,13 +359,14 @@ if (!globalThis.namespaces?.['kid-gloves']) {
           objDefProp(this, Symbol.toPrimitive, function toPrimitive() { return symbol; });
           objDefProp(this, Symbol.toStringTag, function toStringTag() { return symbol.toString(); });
           this.description = symbol.description;
-          Object.setPrototypeOf(this, globalThis['&Symbol'].prototype);
+          Object.setPrototypeOf(this, globalThis[$Symbol].prototype);
         }
         return symbol;
       }
-      assignProto(Symbol, globalThis['&Symbol']);
-      Object.setPrototypeOf(Symbol, globalThis['&Symbol']);
-    }
+      assignProto(globalThis.Symbol, globalThis[$Symbol]);
+      Object.setPrototypeOf(globalThis.Symbol, globalThis[$Symbol]);
+    })();
+
 
     if (globalThis.Promise && !globalThis['&Promise']) {
       objDefProp(globalThis, '&Promise', Promise);
@@ -641,7 +645,7 @@ if (!globalThis.namespaces?.['kid-gloves']) {
           } catch (e) {
             console.warn(e);
             try {
-              return this['&getElementsByTagName'](...[...arguments].map(x => String(x?.description ?? x)));
+              return this['&getElementsByTagName'](...[...arguments].map(x => str(x)));
             } catch (e) {
               console.warn(e);
               return this['&getElementsByTagName']?.('<>') ?? [];
@@ -666,7 +670,7 @@ if (!globalThis.namespaces?.['kid-gloves']) {
           } catch (e) {
             console.warn(e);
             try {
-              return this['&getElementsByClassName'](...[...arguments].map(x => String(x?.description ?? x)));
+              return this['&getElementsByClassName'](...[...arguments].map(x => str(x)));
             } catch (e) {
               console.warn(e);
               return this['&getElementsByTagName']?.('<>') ?? [];
@@ -764,7 +768,8 @@ if (!globalThis.namespaces?.['kid-gloves']) {
 
 
     }
-
+    makeNodes('XMLDocument');
+    makeNodes('HTMLDocument');
     makeNodes('Document');
     makeNodes('Element');
     makeNodes('DocumentFragment');
@@ -840,13 +845,13 @@ if (!globalThis.namespaces?.['kid-gloves']) {
     }
     if (globalThis.parseFloat && !globalThis['&parseFloat']) {
       objDefProp(globalThis, '&parseFloat', globalThis.parseFloat);
-      objDefProp(globalThis, 'parseFloat', function parseFloat(str) {
+      objDefProp(globalThis, 'parseFloat', function parseFloat(s) {
         try {
-          return globalThis['&parseFloat'](str);
+          return globalThis['&parseFloat'](s);
         } catch (e) {
           console.warn(e);
           try {
-            return globalThis['&parseFloat'](String(str.description ?? str));
+            return globalThis['&parseFloat'](str(s));
           } catch (e) {
             console.warn(e);
             return NaN;
@@ -857,13 +862,13 @@ if (!globalThis.namespaces?.['kid-gloves']) {
 
     if (globalThis.parseInt && !globalThis['&parseInt']) {
       objDefProp(globalThis, '&parseInt', globalThis.parseInt);
-      objDefProp(globalThis, 'parseInt', function parseInt(str) {
+      objDefProp(globalThis, 'parseInt', function parseInt(s) {
         try {
-          return globalThis['&parseInt'](str);
+          return globalThis['&parseInt'](s);
         } catch (e) {
           console.warn(e);
           try {
-            return globalThis['&parseInt'](String(str.description ?? str));
+            return globalThis['&parseInt'](str(s));
           } catch (e) {
             console.warn(e);
             return NaN;
@@ -874,13 +879,13 @@ if (!globalThis.namespaces?.['kid-gloves']) {
 
     if (Number.parseFloat && !Number['&parseFloat']) {
       objDefProp(Number, '&parseFloat', Number.parseFloat);
-      objDefProp(Number, 'parseFloat', function parseFloat(str) {
+      objDefProp(Number, 'parseFloat', function parseFloat(s) {
         try {
-          return Number['&parseFloat'](str);
+          return Number['&parseFloat'](s);
         } catch (e) {
           console.warn(e);
           try {
-            return Number['&parseFloat'](String(str.description ?? str));
+            return Number['&parseFloat'](str(s));
           } catch (e) {
             console.warn(e);
             return NaN;
@@ -891,13 +896,13 @@ if (!globalThis.namespaces?.['kid-gloves']) {
 
     if (Number.parseInt && !Number['&parseInt']) {
       objDefProp(Number, '&parseInt', Number.parseInt);
-      objDefProp(Number, 'parseInt', function parseInt(str) {
+      objDefProp(Number, 'parseInt', function parseInt(s) {
         try {
-          return Number['&parseInt'](str);
+          return Number['&parseInt'](s);
         } catch (e) {
           console.warn(e);
           try {
-            return Number['&parseInt'](String(str.description ?? str));
+            return Number['&parseInt'](str(s));
           } catch (e) {
             console.warn(e);
             return NaN;
@@ -907,13 +912,13 @@ if (!globalThis.namespaces?.['kid-gloves']) {
     }
     if (globalThis.document?.write && !globalThis.document?.['&write']) {
       objDefProp(document, '&write', document.write);
-      objDefProp(document, 'write', function write(str) {
+      objDefProp(document, 'write', function write(s) {
         try {
-          return document['&write'](str);
+          return document['&write'](s);
         } catch (e) {
           console.warn(e);
           try {
-            return document['&write'](String(str.description ?? str));
+            return document['&write'](str(s));
           } catch (e) {
             console.warn(e);
             return NaN;
@@ -924,20 +929,20 @@ if (!globalThis.namespaces?.['kid-gloves']) {
 
     if (globalThis?.EventTarget?.prototype?.addEventListener && !globalThis?.EventTarget?.prototype?.['&addEventListener']) {
       objDefProp(EventTarget.prototype, '&addEventListener', EventTarget.prototype.addEventListener);
-      objDefProp(EventTarget.prototype, 'addEventListener', function addEventListener(str) {
+      objDefProp(EventTarget.prototype, 'addEventListener', function addEventListener(s) {
         try {
           return this['&addEventListener'](...arguments);
         } catch (e) {
           console.warn(e);
           try {
             const args = [...arguments];
-            args[0] = String(args[0].description ?? args[0]);
+            args[0] = str(args[0]);
             return this['&addEventListener'](...args);
           } catch (e) {
             console.warn(e);
             try {
               const args = [...arguments];
-              args[0] = String(args[0].description ?? args[0]);
+              args[0] = str(args[0]);
               args[1] = () => (args[1]?.call?.(this, ...arguments) ?? Object(args[1]));
               return this['&addEventListener'](...args);
             } catch (e) {
@@ -1014,13 +1019,13 @@ if (!globalThis.namespaces?.['kid-gloves']) {
     }
     if (globalThis.parseFloat && !globalThis['&parseFloat']) {
       objDefProp(globalThis, '&parseFloat', globalThis.parseFloat);
-      objDefProp(globalThis, 'parseFloat', function parseFloat(str) {
+      objDefProp(globalThis, 'parseFloat', function parseFloat(s) {
         try {
-          return globalThis['&parseFloat'](str);
+          return globalThis['&parseFloat'](s);
         } catch (e) {
           console.warn(e);
           try {
-            return globalThis['&parseFloat'](String(str.description ?? str));
+            return globalThis['&parseFloat'](str(s));
           } catch (e) {
             console.warn(e);
             return NaN;
@@ -1079,13 +1084,13 @@ if (!globalThis.namespaces?.['kid-gloves']) {
     })();
     if (Number.parseInt && !Number['&parseInt']) {
       objDefProp(Number, '&parseInt', Number.parseInt);
-      objDefProp(Number, 'parseInt', function parseInt(str) {
+      objDefProp(Number, 'parseInt', function parseInt(s) {
         try {
-          return Number['&parseInt'](str);
+          return Number['&parseInt'](s);
         } catch (e) {
           console.warn(e);
           try {
-            return Number['&parseInt'](String(str.description ?? str));
+            return Number['&parseInt'](str(s));
           } catch (e) {
             console.warn(e);
             return NaN;
@@ -1095,13 +1100,13 @@ if (!globalThis.namespaces?.['kid-gloves']) {
     }
     if (globalThis?.document?.write && !globalThis?.document?.['&write']) {
       objDefProp(document, '&write', document.write);
-      objDefProp(document, 'write', function write(str) {
+      objDefProp(document, 'write', function write(s) {
         try {
-          return document['&write'](str);
+          return document['&write'](s);
         } catch (e) {
           console.warn(e);
           try {
-            return document['&write'](String(str.description ?? str));
+            return document['&write'](str(s));
           } catch (e) {
             console.warn(e);
             return NaN;
@@ -1119,13 +1124,13 @@ if (!globalThis.namespaces?.['kid-gloves']) {
           console.warn(e);
           try {
             const args = [...arguments];
-            args[0] = String(args[0].description ?? args[0]);
+            args[0] = str(args[0]);
             return this['&addEventListener'](...args);
           } catch (e) {
             console.warn(e);
             try {
               const args = [...arguments];
-              args[0] = String(args[0].description ?? args[0]);
+              args[0] = str(args[0]);
               args[1] = () => args[1]?.();
               return this['&addEventListener'](...args);
             } catch (e) {
