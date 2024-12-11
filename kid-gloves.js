@@ -129,17 +129,18 @@ if (!globalThis.namespaces?.['kid-gloves']) {
             if (excepts.includes(x)) {
               continue;
             }
-            if (typeof source[x] == 'function'){
-            
-            objDefEnum(target, x, function(){return source[x](...arguments);});
+            (()=>{
+              const $source = source;
+            if (typeof $source[x] == 'function'){
+            objDefEnum(target, x, function(){return $source[x](...arguments);});
             }else{
               Object.defineProperty(target, x, {
                   get() {
-                      return source?.[x];
+                      return $source[x];
                   },
                 set(value) {
                   try{
-                   (source??{})[x] = value;
+                   $source[x] = value;
                   }catch(e){
                     console.warn(e,this,...arguments);
                   }
@@ -148,6 +149,7 @@ if (!globalThis.namespaces?.['kid-gloves']) {
                   configurable: true,
               });
             }
+            })();
             enums.push(x);
           } catch (e) {
             continue;
@@ -158,17 +160,18 @@ if (!globalThis.namespaces?.['kid-gloves']) {
             if (enums.includes(key) || excepts.includes(key)) {
               continue;
             }
-            if (typeof source[key] == 'function'){
-
-              objDefProp(target, key, function(){return source[key](...arguments);});
+           (()=>{
+             const $source = source;
+            if (typeof $source[key] == 'function'){
+              objDefProp(target, key, function(){return $source[key](...arguments);});
               }else{
                 Object.defineProperty(target, key, {
                     get() {
-                        return source?.[key];
+                        return $source[key];
                     },
                   set(value) {
                     try{
-                     (source??{})[key] = value;
+                     $source[key] = value;
                     }catch(e){
                       console.warn(e,this,...arguments);
                     }
@@ -177,6 +180,7 @@ if (!globalThis.namespaces?.['kid-gloves']) {
                     configurable: true,
                 });
               }
+          })();
           } catch {
             continue;
           }
@@ -186,17 +190,18 @@ if (!globalThis.namespaces?.['kid-gloves']) {
             if (enums.includes(key) || excepts.includes(key)) {
               continue;
             }
-            if (typeof source[key] == 'function'){
-
-            objDefProp(target, key, function(){return source[key](...arguments);});
+            (()=>{
+              const $source = source;
+            if (typeof $source[key] == 'function'){
+            objDefProp(target, key, function(){return $source[key](...arguments);});
             }else{
               Object.defineProperty(target, key, {
                   get() {
-                      return source?.[key];
+                      return $source[key];
                   },
                   set(value) {
                     try{
-                     (source??{})[key] = value;
+                     $source[key] = value;
                     }catch(e){
                       console.warn(e,this,...arguments);
                     }
@@ -205,6 +210,7 @@ if (!globalThis.namespaces?.['kid-gloves']) {
                   configurable: true,
               });
             }
+            })();
           } catch {
             continue;
           }
