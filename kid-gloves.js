@@ -527,8 +527,7 @@ if (!globalThis.namespaces?.['kid-gloves']) {
       nul.style.visibility = 'hidden';
       nul.style.opactiy = 0;
       const all = newQ(Document)?.all ?? Object(false);
-      shamAll(all,nul);
-      return nul;
+      return shamAll(all,nul);
     }
 
     function makeNodes(nodeType) {
