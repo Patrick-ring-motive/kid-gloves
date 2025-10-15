@@ -333,57 +333,48 @@ if (!globalThis.namespaces?.['kid-gloves']) {
         return thisClass;
     };
     
-
-    (() => {
-      const $BigInt = Symbol('BigInt');
-      objDefProp(globalThis, $BigInt, globalThis.BigInt);
-      globalThis.BigInt &&= function BigInt(n) {
-        const bigint = globalThis[$BigInt](n);
-        if (new.target) {
-          try {
-            throw new Error('Using BigInt with new is not recommended, use BigInt(n) instead');
-          } catch (e) {
-            console.warn(e, this, new.target, ...arguments);
-          }
-          objDefProp(this, 'toString', function toString() { return bigint.toString(...arguments); });
-          objDefProp(this, 'valueOf', function valueOf() { return bigint; });
-          objDefProp(this, 'toLocaleString', function toLocaleString() { return bigint.toLocaleString(...arguments); });
-          objDefProp(this, Symbol.toPrimitive, function toPrimitive() { return bigint; });
-          objDefProp(this, Symbol.toStringTag, function toStringTag() { return bigint.toString(); });
-
-          Object.setPrototypeOf(this, globalThis[$BigInt].prototype);
-        }
-        return bigint;
-      }
-      assignProto(globalThis.BigInt, globalThis[$BigInt]);
-      Object.setPrototypeOf(globalThis.BigInt, globalThis[$BigInt]);
+     (() => {
+        const _BigInt = globalThis.BigInt;
+        (() => {
+            globalThis.BigInt = Extends(function BigInt(...args) {
+                if (new.target) {
+                    try {
+                        return Reflect.construct(_BigInt, args, new.target);
+                    } catch (e) {
+                        console.warn(e, ...args);
+                    }
+                }
+                try {
+                    return _BigInt(...args);
+                } catch (e) {
+                    console.warn(e, ...args);
+                    return 0n;
+                }
+            }, _BigInt);
+        })();
     })();
 
-
-    (() => {
-      const $Symbol = Symbol('Symbol');
-      objDefProp(globalThis, $Symbol, globalThis.Symbol);
-      globalThis.Symbol = function Symbol(s) {
-        const symbol = globalThis[$Symbol](s);
-        if (new.target) {
-          try {
-            throw new Error('Using Symbol with new is not recommended, use Symbol() instead');
-          } catch (e) {
-            console.warn(e, this, new.target, ...arguments);
-          }
-          objDefProp(this, 'toString', function toString() { return symbol.toString(...arguments); });
-          objDefProp(this, 'valueOf', function valueOf() { return symbol; });
-          objDefProp(this, 'toLocaleString', function toLocaleString() { return symbol.toLocaleString(...arguments); });
-          objDefProp(this, Symbol.toPrimitive, function toPrimitive() { return symbol; });
-          objDefProp(this, Symbol.toStringTag, function toStringTag() { return symbol.toString(); });
-          this.description = symbol.description;
-          Object.setPrototypeOf(this, globalThis[$Symbol].prototype);
-        }
-        return symbol;
-      }
-      assignProto(globalThis.Symbol, globalThis[$Symbol]);
-      Object.setPrototypeOf(globalThis.Symbol, globalThis[$Symbol]);
+  (() => {
+        const _Symbol = globalThis.Symbol;
+        (() => {
+            globalThis.Symbol = Extends(function Symbol(...args) {
+                if (new.target) {
+                    try {
+                        return Reflect.construct(_Symbol, args, new.target);
+                    } catch (e) {
+                        console.warn(e, ...args);
+                    }
+                }
+                try {
+                    return _Symbol(...args);
+                } catch (e) {
+                    console.warn(e, ...args);
+                    return Object.create(_Symbol.prototype);
+                }
+            }, _Symbol);
+        })();
     })();
+
 
 
     if (globalThis.Promise && !globalThis['&Promise']) {
@@ -432,112 +423,16 @@ if (!globalThis.namespaces?.['kid-gloves']) {
         })();
     })();
 
-    if (globalThis.Map && !globalThis['&Map']) {
-      objDefProp(globalThis, '&Map', Map);
-      globalThis.Map = function Map() {
-        const map = new globalThis['&Map'](...arguments);
-        if (new.target) {
-          objDefProp(this, 'toString', function toString() { return map.toString(...arguments); });
-          objDefProp(this, 'valueOf', function valueOf() { return map; });
-          objDefProp(this, 'toLocaleString', function toLocaleString() { return map.toLocaleString(...arguments); });
-          objDefProp(this, Symbol.toPrimitive, function toPrimitive() { return map; });
-          objDefProp(this, Symbol.toStringTag, function toStringTag() { return map.toString(); });
-          map.size && Object.defineProperty(this, "size", {
-            get() {
-              return map.size;
-            },
-            set() {
-              console.warn('Map.size is read-only');
-            },
-            enumerable: true,
-            configurable: true,
-          });
-          map.clear && objDefProp(this, 'clear', function clear() { return map.clear(...arguments); });
-          map['delete'] && objDefProp(this, 'delete', function dеlеtе() { return map['delete'](...arguments); });
-          map.entries && objDefProp(this, 'entries', function entries() { return map.entries(...arguments); });
-          map.forEach && objDefProp(this, 'forEach', function forEach() { return map.forEach(...arguments); });
-          map.get && objDefProp(this, 'get', function get() { return map.get(...arguments); });
-          map.has && objDefProp(this, 'has', function has() { return map.has(...arguments); });
-          map.keys && objDefProp(this, 'keys', function keys() { return map.keys(...arguments); });
-          map.values && objDefProp(this, 'values', function values() { return map.values(...arguments); });
-          map.set && objDefProp(this, 'set', function set() { return map.set(...arguments); });
-          map[Symbol?.iterator] && objDefProp(this, Symbol?.iterator ?? 'iterator', function iterator() { return map[Symbol.iterator](...arguments); });
-          Object.setPrototypeOf(this, globalThis['&Map'].prototype);
-        } else {
-          console.warn('Using Map without new is not recommended, use new Map() instead');
-        }
-        return map;
-      }
-      assignProto(Map, globalThis['&Map']);
-      Object.setPrototypeOf(Map, globalThis['&Map']);
-
-
-    }
-
-    if (globalThis.Map?.prototype && !globalThis.Map?.prototype?.['&get']) {
-      objDefProp(globalThis.Map.prototype, '&get', new Map().get);
-      objDefProp(globalThis.Map.prototype, 'get', function get(key) {
-        /*if (!this.has(key)) {
-          return console.warn(`No element found in Map for key: ${key}`);
-        }*/
+    (()=>{
+      const _get = Map.prototype.get;
+      objDefProp(Map.prototype, 'get', function get(key) {
         try {
-          return this['&get'](key);
+          return _get.call(this,key);
         } catch (e) {
-          return console.warn(e);
+          console.warn(e,key);
         }
       });
-      objDefProp(globalThis['&Map'].prototype, '&get', Map.prototype['&get']);
-      objDefProp(globalThis['&Map'].prototype, 'get', new Map().get);
-    }
-
-    if (globalThis.Set && !globalThis['&Set']) {
-      objDefProp(globalThis, '&Set', Set);
-      globalThis.Set = function Set() {
-        const set = new globalThis['&Set'](...arguments);
-        if (new.target) {
-          objDefProp(this, 'toString', function toString() { return set.toString(...arguments); });
-          objDefProp(this, 'valueOf', function valueOf() { return set; });
-          objDefProp(this, 'toLocaleString', function toLocaleString() { return set.toLocaleString(...arguments); });
-          objDefProp(this, Symbol.toPrimitive, function toPrimitive() { return set; });
-          objDefProp(this, Symbol.toStringTag, function toStringTag() { return set.toString(); });
-          set.size && Object.defineProperty(this, "size", {
-            get() {
-              return set.size;
-            },
-            set() {
-              console.warn('Set.size is read-only');
-            },
-            enumerable: true,
-            configurable: true,
-          });
-          set.clear && objDefProp(this, 'clear', function clear() { return set.clear(...arguments); });
-          set['delete'] && objDefProp(this, 'delete', function dеlеtе() { return set['delete'](...arguments); });
-          set.entries && objDefProp(this, 'entries', function entries() { return set.entries(...arguments); });
-          set.forEach && objDefProp(this, 'forEach', function forEach() { return set.forEach(...arguments); });
-          set.get && objDefProp(this, 'get', function get() { return set.get(...arguments); });
-          set.has && objDefProp(this, 'has', function has() { return set.has(...arguments); });
-          set.keys && objDefProp(this, 'keys', function keys() { return set.keys(...arguments); });
-          set.values && objDefProp(this, 'values', function values() { return set.values(...arguments); });
-          set.set && objDefProp(this, 'set', function set() { return set.set(...arguments); });
-          set[Symbol?.iterator] && objDefProp(this, Symbol?.iterator ?? 'iterator', function iterator() { return set[Symbol.iterator](...arguments); });
-          set.add && objDefProp(this, 'add', function add() { return set.add(...arguments); });
-          set.difference && objDefProp(this, 'difference', function difference() { return set.difference(...arguments); });
-          set.intersection && objDefProp(this, 'intersection', function intersection() { return set.intersection(...arguments); });
-
-          set.isDisjointFrom && objDefProp(this, 'isDisjointFrom', function isDisjointFrom() { return set.isDisjointFrom(...arguments); });
-          set.isSubsetOf && objDefProp(this, 'isSubsetOf', function isSubsetOf() { return set.isSubsetOf(...arguments); });
-          set.isSupersetOf && objDefProp(this, 'isSupersetOf', function isSupersetOf() { return set.isSupersetOf(...arguments); });
-          set.symmetricDifference && objDefProp(this, 'symmetricDifference', function symmetricDifference() { return set.symmetricDifference(...arguments); });
-          set.union && objDefProp(this, 'union', function union() { return set.union(...arguments); });
-          Object.setPrototypeOf(this, globalThis['&Set'].prototype);
-        } else {
-          console.warn('Using Set without new is not recommended, use new Set() instead');
-        }
-        return set;
-      }
-      assignProto(Set, globalThis['&Set']);
-      Object.setPrototypeOf(Set, globalThis['&Set']);
-    }
+    })();
 
     function emptyNodeList() {
       return document?.createDocumentFragment?.()?.querySelectorAll?.('*') ?? [];
@@ -552,40 +447,43 @@ if (!globalThis.namespaces?.['kid-gloves']) {
     }
 
     function makeNodes(nodeType) {
-      if (globalThis[nodeType]?.prototype?.querySelector && !globalThis[nodeType]?.prototype?.['&querySelector']) {
-        objDefProp(globalThis[nodeType].prototype, '&querySelector', globalThis[nodeType].prototype.querySelector);
-        objDefEnum(globalThis[nodeType].prototype, 'querySelector', function querySelector() {
+
+       (()=>{
+        const _querySelector = globalThis[nodeType]?.prototype?.querySelector;
+        if(!_querySelector)return;
+        objDefEnum(globalThis[nodeType].prototype, 'querySelector', Extends(function querySelector(...args) {
           try {
-            return this['&querySelector'](...arguments) ?? Null();
+            return _querySelector.apply(this,args);
           } catch (e) {
-            console.warn(e);
+            console.warn(e, this, ...args);
             try {
-              return this['&querySelector'](...[...arguments].map(x => str(x))) ?? Null();
+              return _querySelector.apply(this,args.map(x => str(x)));
             } catch (e) {
               console.warn(e);
               return Null();
             }
           }
-        });
-      }
-
-      if (globalThis[nodeType]?.prototype?.querySelectorAll && !globalThis[nodeType]?.prototype?.['&querySelectorAll']) {
-        objDefProp(globalThis[nodeType].prototype, '&querySelectorAll', globalThis[nodeType].prototype.querySelectorAll);
-        objDefEnum(globalThis[nodeType].prototype, 'querySelectorAll', function querySelectorAll() {
+        },_querySelector));
+      })();
+      
+      (()=>{
+        const _querySelectorAll = globalThis[nodeType]?.prototype?.querySelector;
+        if(!_querySelectorAll)return;
+        objDefEnum(globalThis[nodeType].prototype, 'querySelectorAll', Extends(function querySelectorAll(...args) {
           try {
-            return this['&querySelectorAll'](...arguments);
+            return _querySelectorAll.apply(this,args);
           } catch (e) {
-            console.warn(e, this, ...arguments);
+            console.warn(e, this, ...args);
             try {
-              return this['&querySelectorAll'](...[...arguments].map(x => str(x)));
+              return _querySelectorAll.apply(this,args.map(x => str(x)));
             } catch (e) {
               console.warn(e);
               return emptyNodeList();
             }
           }
-        });;
-      }
-
+        },_querySelectorAll));
+      })();
+        
       if (globalThis[nodeType]?.prototype?.getElementById && !globalThis[nodeType]?.prototype?.['&getElementById']) {
         objDefProp(globalThis[nodeType].prototype, '&getElementById', globalThis[nodeType].prototype.getElementById);
         objDefEnum(globalThis[nodeType].prototype, 'getElementById', function getElementById() {
