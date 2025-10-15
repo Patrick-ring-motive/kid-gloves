@@ -315,6 +315,24 @@ if (!globalThis.namespaces?.['kid-gloves']) {
       enumerable: false,
       configurable: true,
     });
+    const Extends = (thisClass, superClass) => {
+        try {
+            Object.setPrototypeOf(thisClass, superClass);
+            Object.setPrototypeOf(
+                thisClass.prototype,
+                superClass?.prototype ??
+                superClass?.constructor?.prototype ??
+                superClass
+            );
+        } catch (e) {
+            console.warn(e, {
+                thisClass,
+                superClass
+            });
+        }
+        return thisClass;
+    };
+    
 
     (() => {
       const $BigInt = Symbol('BigInt');
@@ -392,67 +410,27 @@ if (!globalThis.namespaces?.['kid-gloves']) {
       Object.setPrototypeOf(Promise, globalThis['&Promise']);
     }
 
-    if (globalThis.RegExp && !globalThis['&RegExp']) {
-      objDefProp(globalThis, '&RegExp', RegExp);
-      globalThis.RegExp = function RegExp() {
-        let rex;
-        try {
-          if (new.target) {
-            rex = new (globalThis['&RegExp'])(...arguments);
-            objDefProp(this, 'toString', function toString() { return rex.toString(...arguments); });
-            objDefProp(this, 'valueOf', function valueOf() { return rex; });
-            objDefProp(this, 'toLocaleString', function toLocaleString() { return rex.toLocaleString(...arguments); });
-            objDefProp(this, Symbol.toPrimitive, function toPrimitive() { return rex; });
-            objDefProp(this, Symbol.toStringTag, function toStringTag() { return rex.toString(); });
-            objDefProp(this, 'hasOwnProperty', function hasOwnProperty() { return rex.hasOwnProperty(...arguments); });
-            objDefProp(this, 'isPrototypeOf', function isPrototypeOf() { return rex.isPrototypeOf(...arguments); });
-            objDefProp(this, 'propertyIsEnumerable', function propertyIsEnumerable() { return rex.propertyIsEnumerable(...arguments); });
-
-            for (let x of ['dotAll', 'flags', 'global', 'hasIndicies', 'ignoreCase', 'lastIndex', 'multiline', 'source', 'sticky', 'unicode', 'unicodeSets']) {
-              rex.size && Object.defineProperty(this, x, {
-                get() {
-                  return rex[x];
-                },
-                set(val) {
-                  rex[x] = val;
-                },
-                enumerable: true,
-                configurable: true,
-              });
-            }
-            rex.compile && objDefProp(this, 'compile', function compile() { return rex.compile(...arguments); });
-            rex.exec && objDefProp(this, 'exec', function exec() { return rex.exec(...arguments); });
-            rex.test && objDefProp(this, 'test', function test() { return rex.test(...arguments); });
-            rex.clear && objDefProp(this, 'clear', function clear() { return rex.clear(...arguments); });
-            rex['delete'] && objDefProp(this, 'delete', function dеlеtе() { return rex['delete'](...arguments); });
-            rex.entries && objDefProp(this, 'entries', function entries() { return rex.entries(...arguments); });
-            rex.forEach && objDefProp(this, 'forEach', function forEach() { return rex.forEach(...arguments); });
-            rex.get && objDefProp(this, 'get', function get() { return rex.get(...arguments); });
-            rex.has && objDefProp(this, 'has', function has() { return rex.has(...arguments); });
-            rex.keys && objDefProp(this, 'keys', function keys() { return rex.keys(...arguments); });
-            rex.values && objDefProp(this, 'values', function values() { return rex.values(...arguments); });
-            rex.set && objDefProp(this, 'set', function set() { return rex.set(...arguments); });
-            rex[Symbol?.iterator] && objDefProp(this, Symbol?.iterator ?? 'iterator', function iterator() { return rex[Symbol.iterator](...arguments); });
-            rex[Symbol?.match] && objDefProp(this, Symbol?.match ?? 'match', function match() { return rex[Symbol.match](...arguments); });
-            rex[Symbol?.matchAll] && objDefProp(this, Symbol?.matchAll ?? 'matchAll', function matchAll() { return rex[Symbol.matchAll](...arguments); });
-            rex[Symbol?.replace] && objDefProp(this, Symbol?.replace ?? 'replace', function replace() { return rex[Symbol.replace](...arguments); });
-            rex[Symbol?.replaceAll] && objDefProp(this, Symbol?.replaceAll ?? 'replaceAll', function replaceAll() { return rex[Symbol.replaceAll](...arguments); });
-            rex[Symbol?.search] && objDefProp(this, Symbol?.search ?? 'search', function search() { return rex[Symbol.search](...arguments); });
-            rex[Symbol?.split] && objDefProp(this, Symbol?.split ?? 'split', function split() { return rex[Symbol.split](...arguments); });
-
-            Object.setPrototypeOf(this, globalThis['&RegExp'].prototype);
-          } else {
-            rex = (globalThis['&RegExp'])(...arguments);
-          }
-        } catch (e) {
-          console.warn(e, ...arguments);
-          rex = /$RegExp^/;
-        }
-        return rex;
-      }
-      assignProto(RegExp, globalThis['&RegExp']);
-      Object.setPrototypeOf(RegExp, globalThis['&RegExp']);
-    }
+(() => {
+        const _RegExp = globalThis.RegExp;
+        (() => {
+            globalThis.RegExp = Extends(function RegExp(...args) {
+                if (new.target) {
+                    try {
+                        return Reflect.construct(_RegExp, args, new.target);
+                    } catch (e) {
+                        console.warn(e, ...args);
+                        return Reflect.construct(_RegExp, [/$RegExp^/], new.target);
+                    }
+                }
+                try {
+                    return _RegExp(...args);
+                } catch (e) {
+                    console.warn(e, ...args);
+                    return _RegExp(/$RegExp^/);
+                }
+            }, _RegExp);
+        })();
+    })();
 
     if (globalThis.Map && !globalThis['&Map']) {
       objDefProp(globalThis, '&Map', Map);
