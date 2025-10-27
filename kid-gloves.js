@@ -315,15 +315,41 @@ if (!globalThis.namespaces?.['kid-gloves']) {
       enumerable: false,
       configurable: true,
     });
-    const Extends = (thisClass, superClass) => {
+  // Utility function to safely execute functions without throwing
+  const Q = fn => {
         try {
-            Object.setPrototypeOf(thisClass, superClass);
+            return fn?.()
+        } catch {}
+    };
+    
+  // Ensures objects have proper prototype chains for inheritance
+  const constructPrototype = newClass => {
+        try {
+            if (newClass?.prototype) return newClass;
+            const constProto = newClass?.constructor?.prototype;
+            if (constProto) {
+                newClass.prototype = Q(() => constProto?.bind?.(constProto)) ?? Object.create(Object(constProto));
+                return newClass;
+            }
+            newClass.prototype = Q(() => newClass?.bind?.(newClass)) ?? Object.create(Object(newClass));
+        } catch (e) {
+            console.warn(e, newClass);
+        }
+    };
+    
+  // Preserves prototype chain when wrapping methods
+  const extend = (thisClass, superClass) => {
+        try {
+            constructPrototype(thisClass);
+            constructPrototype(superClass);
             Object.setPrototypeOf(
                 thisClass.prototype,
                 superClass?.prototype ??
                 superClass?.constructor?.prototype ??
                 superClass
             );
+            Object.setPrototypeOf(thisClass, superClass);
+
         } catch (e) {
             console.warn(e, {
                 thisClass,
@@ -336,7 +362,7 @@ if (!globalThis.namespaces?.['kid-gloves']) {
      (() => {
         const _BigInt = globalThis.BigInt;
         (() => {
-            globalThis.BigInt = Extends(function BigInt(...args) {
+            globalThis.BigInt = extend(function BigInt(...args) {
                 if (new.target) {
                     try {
                         return Reflect.construct(_BigInt, args, new.target);
@@ -357,7 +383,7 @@ if (!globalThis.namespaces?.['kid-gloves']) {
   (() => {
         const _Symbol = globalThis.Symbol;
         (() => {
-            globalThis.Symbol = Extends(function Symbol(...args) {
+            globalThis.Symbol = extend(function Symbol(...args) {
                 if (new.target) {
                     try {
                         return Reflect.construct(_Symbol, args, new.target);
@@ -404,7 +430,7 @@ if (!globalThis.namespaces?.['kid-gloves']) {
 (() => {
         const _RegExp = globalThis.RegExp;
         (() => {
-            globalThis.RegExp = Extends(function RegExp(...args) {
+            globalThis.RegExp = extend(function RegExp(...args) {
                 if (new.target) {
                     try {
                         return Reflect.construct(_RegExp, args, new.target);
@@ -451,7 +477,7 @@ if (!globalThis.namespaces?.['kid-gloves']) {
        (()=>{
         const _querySelector = globalThis[nodeType]?.prototype?.querySelector;
         if(!_querySelector)return;
-        objDefEnum(globalThis[nodeType].prototype, 'querySelector', Extends(function querySelector(...args) {
+        objDefEnum(globalThis[nodeType].prototype, 'querySelector', extend(function querySelector(...args) {
           try {
             return _querySelector.apply(this,args);
           } catch (e) {
@@ -469,7 +495,7 @@ if (!globalThis.namespaces?.['kid-gloves']) {
       (()=>{
         const _querySelectorAll = globalThis[nodeType]?.prototype?.querySelector;
         if(!_querySelectorAll)return;
-        objDefEnum(globalThis[nodeType].prototype, 'querySelectorAll', Extends(function querySelectorAll(...args) {
+        objDefEnum(globalThis[nodeType].prototype, 'querySelectorAll', extend(function querySelectorAll(...args) {
           try {
             return _querySelectorAll.apply(this,args);
           } catch (e) {
