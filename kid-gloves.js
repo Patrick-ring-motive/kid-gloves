@@ -461,7 +461,7 @@ if (!globalThis.namespaces?.['kid-gloves']) {
     })();
 
     function emptyNodeList() {
-      return document?.createDocumentFragment?.()?.querySelectorAll?.('*') ?? [];
+      return Q(()=>document?.createElemet?.('NodeList')?.childNodes) ?? [];
     }
     function Null() {
       const nul = document.createElement('null');
