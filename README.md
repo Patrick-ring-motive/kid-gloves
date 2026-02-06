@@ -1,3 +1,46 @@
+# kid-gloves 🌐
+
+**Program with a gentler touch.**
+
+`kid-gloves` is a JavaScript utility that patches common language quirks and DOM methods to prevent them from throwing errors. Instead, it converts these potential crashes into helpful console warnings, making it an ideal tool for learning, debugging, and rapid prototyping.
+
+## 🚀 Installation
+
+Add the following script tag to your HTML, ideally before any other scripts you wish to debug:
+
+```html
+<script src="https://unpkg.com/kid-gloves/kid-gloves.js"></script>
+```
+
+## 🛠 Features & Fixes
+
+### Constructors
+- **`new BigInt()` & `new Symbol()`**: Returns the object-wrapped version instead of throwing a TypeError.
+- **`Promise()`, `Set()`, `Map()`**: Allows calling these as constructors without the `new` keyword.
+
+### DOM Methods
+- **`document.querySelector` & `document.querySelectorAll`**: Returns `null` or an empty `NodeList` respectively for invalid queries instead of throwing.
+- **`document.getElementById`**: Returns `null` for invalid IDs.
+- **`document.getElementsById`**: Fixes the common typo and routes to `querySelectorAll`.
+- **`document.getElementsBy(TagName|ClassName|Name)`**: Returns an empty `HTMLCollection` for invalid queries.
+
+### Objects & Coercion
+- **`Object.create()`**: Attempts to coerce non-object prototypes into objects or returns `Object.create(null)` if coercion fails.
+- **`parseFloat()` & `parseInt()`**: Safely handles `Symbol` inputs by coercing them to strings first.
+- **Symbol Coercion**: Patches many functions that throw on `Symbol`-to-string coercion by using `String(sym.description ?? sym)`.
+- **Object Coercion**: Automatically wraps literals in `Object()` when a function expects an object.
+
+### Map Access
+- **Missing Elements**: Accessing a non-existent `Map` element prints a warning instead of failing silently.
+
+## ⚠️ Important Note
+
+This tool is designed for **development and educational purposes**. It monkey-patches global objects and built-in methods, which can lead to unpredictable behavior in production environments. Use with care!
+
+## 📄 License
+
+MIT
+
 # kid-gloves
 🌐 Kid Gloves
 
