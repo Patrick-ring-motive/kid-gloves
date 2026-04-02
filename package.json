@@ -1,9 +1,7 @@
 {
   "name": "kid-gloves",
-
   "version": "0.0.22",
   "author": "Patrick Ring <patrick.ring.motive@gmail.com>",
-
   "description": "",
   "main": "kid-gloves.js",
   "scripts": {
@@ -14,7 +12,5 @@
     "url": "https://github.com/Patrick-ring-motive/kid-gloves.git"
   },
   "keywords": [],
-
   "license": "ISC"
-
 }
